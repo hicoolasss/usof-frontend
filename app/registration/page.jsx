@@ -97,8 +97,8 @@ export default function AuthenticationPage() {
                         <blockquote className="space-y-5">
                             <p className="text-lg text-color">
                                 &ldquo;This project has saved me countless hours of work and
-                                it didn't just solve my code errors - it taught me more efficient approaches to coding.
-                                Every solution it provided was like a mini-lesson in best practices. It's not just a problem - solver; it's a skill enhancer.&rdquo;
+                                it didn&apos;t just solve my code errors - it taught me more efficient approaches to coding.
+                                Every solution it provided was like a mini-lesson in best practices. It&apos;s not just a problem - solver; it&apos;s a skill enhancer.&rdquo;
                             </p>
                             <footer className="text-sm text-color">Sofia Davis</footer>
                         </blockquote>
