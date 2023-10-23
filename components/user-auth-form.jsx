@@ -8,30 +8,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import Store from "@/store/store";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Toaster, toast } from 'sonner'
 
 export function UserAuthForm({ className, ...props }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  async function onSubmit(event) {
-    event.preventDefault();
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  
+  const handleRegistration = async () => {
     setIsLoading(true);
 
     console.log("onSubmit");
-  
-    // сбор данных из формы
-    const formData = new FormData(event.target);
-    const login = formData.get('login');
-    const email = formData.get('email');
-    //const fullName = formData.get('fullName'); // Если fullName не обрабатывается в registration, его следует исключить
-    const password = formData.get('password');
-  
+
+    // Используйте значения состояния вместо FormData
     try {
       // Вызываем функцию регистрации
-      await Store.registration(login, email, password); // Мы предполагаем, что Store доступен в вашем контексте
-      // после успешной регистрации, вы можете, например, перенаправить пользователя на другую страницу
+      await Store.registration(login, email, password);
+
+      router.push('/');
+      toast.success('Registration succssessful!', { duration: 2000 });
+      
     } catch (error) {
-      // Ошибки обрабатываются внутри функции registration, здесь можно обработать состояние UI, например, показать сообщение об ошибке
-      console.log("another error:",error);
+      console.log("another error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -39,7 +41,8 @@ export function UserAuthForm({ className, ...props }) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      
+      <div >
         <div className="grid gap-2">
           <div className="grid gap-3">
 
@@ -90,14 +93,14 @@ export function UserAuthForm({ className, ...props }) {
             </div>
           </div>
 
-          <Button className="mt-1" disabled={isLoading}>
+          <Button onClick={handleRegistration} className="mt-1" disabled={isLoading}>
             {/* {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )} */}
             Sign In with Email
           </Button>
         </div>
-      </form>
+      </div>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
