@@ -73,21 +73,6 @@ export function UserAuthForm({ className, ...props }) {
               />
             </div>
 
-            <div>
-              <Label htmlFor="fullName">
-                Full Name
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                placeholder="full name (optional)"
-                type="text"
-                autoCapitalize="none"
-                autoCorrect="off"
-                disabled={isLoading}
-              />
-            </div>
-
 
             <div>
               <Label htmlFor="password">
