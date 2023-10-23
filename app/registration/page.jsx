@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/user-auth-form"
 import { ModeToggle } from '@/components/theme-swithcer'
 import { Button } from "@/components/ui/button"
+import { redirect } from "next/dist/server/api-utils"
+
 
 export const metadata = {
     title: "Authentication",
@@ -14,6 +16,7 @@ export const metadata = {
 }
 
 export default function AuthenticationPage() {
+
     return (
         <>
             {/* <div className="md:hidden">
@@ -32,6 +35,8 @@ export default function AuthenticationPage() {
           className="hidden dark:block"
         />
       </div> */}
+
+      
             <div className="container relative hidden h-screen flex-col items-center justify-center sm:grid md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-background">
                 <Link
                     href="/examples/authentication"

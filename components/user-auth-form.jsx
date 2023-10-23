@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import Store from "@/store/store";
+
 export function UserAuthForm({ className, ...props }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -14,9 +16,25 @@ export function UserAuthForm({ className, ...props }) {
     event.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
+    console.log("onSubmit");
+  
+    // сбор данных из формы
+    const formData = new FormData(event.target);
+    const login = formData.get('login');
+    const email = formData.get('email');
+    //const fullName = formData.get('fullName'); // Если fullName не обрабатывается в registration, его следует исключить
+    const password = formData.get('password');
+  
+    try {
+      // Вызываем функцию регистрации
+      await Store.registration(login, email, password); // Мы предполагаем, что Store доступен в вашем контексте
+      // после успешной регистрации, вы можете, например, перенаправить пользователя на другую страницу
+    } catch (error) {
+      // Ошибки обрабатываются внутри функции registration, здесь можно обработать состояние UI, например, показать сообщение об ошибке
+      console.log("another error:",error);
+    } finally {
       setIsLoading(false);
-    }, 3000);
+    }
   }
 
   return (
@@ -26,12 +44,13 @@ export function UserAuthForm({ className, ...props }) {
           <div className="grid gap-3">
 
             <div>
-              <Label htmlFor="username">
-                Username
+              <Label htmlFor="login">
+                Login
               </Label>
               <Input
-                id="username"
-                placeholder="username"
+                id="login"
+                name="login"
+                placeholder="login"
                 type="text"
                 autoCapitalize="none"
                 autoCorrect="off"
@@ -45,6 +64,7 @@ export function UserAuthForm({ className, ...props }) {
               </Label>
               <Input
                 id="email"
+                name="email"
                 placeholder="name@example.com"
                 type="email"
                 autoCapitalize="none"
@@ -59,6 +79,7 @@ export function UserAuthForm({ className, ...props }) {
               </Label>
               <Input
                 id="fullName"
+                name="fullName"
                 placeholder="full name (optional)"
                 type="text"
                 autoCapitalize="none"
@@ -74,6 +95,7 @@ export function UserAuthForm({ className, ...props }) {
               </Label>
               <Input
                 id="password"
+                name="password"
                 placeholder="password"
                 type="text"
                 autoCapitalize="none"
