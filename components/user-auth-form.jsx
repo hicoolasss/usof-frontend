@@ -58,6 +58,7 @@ export function UserAuthForm({ className, ...props }) {
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                onChange={(e) => setLogin(e.target.value)}
               />
             </div>
 
@@ -73,6 +74,7 @@ export function UserAuthForm({ className, ...props }) {
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -89,6 +91,7 @@ export function UserAuthForm({ className, ...props }) {
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
