@@ -37,7 +37,7 @@ export default function AuthenticationPage() {
       </div> */}
 
       
-            <div className="container relative hidden h-screen flex-col items-center justify-center sm:grid md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-background">
+            <div className="container relative grid h-screen flex-col items-center justify-center sm:grid md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-background">
                 <Link
                     href="/examples/authentication"
                     className={cn(
@@ -110,16 +110,17 @@ export default function AuthenticationPage() {
                     </div>
                 </div>
                 <div className="lg space-y-6 ">
+                    
                     <div className="flex flex-col space-y-5 text-center">
-                        <h1 className="text-5xl font-semibold tracking-tight">
+                        <h1 className="text-2xl font-semibold tracking-tight sm:text-5xl md:text-5xl lg:text-5xl">
                             Create an account
                         </h1>
-                        <p className="text-xl text-muted-foreground">
+                        <p className="text-base text-muted-foreground sm:text-xl md:text5xl lg:text-xl">
                             Enter your details below to create your account
                         </p>
                     </div>
 
-                    <div className="mx-auto flex w-full flex-col justify-center sm:w-[350px]">
+                    <div className="mx-auto flex w-3/4 flex-col justify-center sm:w-3/4 lg:w-2/5">
                         <UserAuthForm />
 
                     </div>
