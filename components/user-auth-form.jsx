@@ -10,15 +10,23 @@ import { Label } from "@/components/ui/label";
 import Store from "@/store/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
+
+import { GitHub } from "iconoir-react";
+import { Google } from "iconoir-react";
+
+import Spinner from "@/components/ui/spinner";
+
+
 
 export function UserAuthForm({ className, ...props }) {
+
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  
+
   const handleRegistration = async () => {
     setIsLoading(true);
 
@@ -31,7 +39,7 @@ export function UserAuthForm({ className, ...props }) {
 
       router.push('/');
       toast.success('Registration succssessful!', { duration: 2000 });
-      
+
     } catch (error) {
       console.log("another error:", error);
     } finally {
@@ -41,7 +49,7 @@ export function UserAuthForm({ className, ...props }) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      
+
       <div >
         <div className="grid gap-2">
           <div className="grid gap-3">
@@ -97,9 +105,9 @@ export function UserAuthForm({ className, ...props }) {
           </div>
 
           <Button onClick={handleRegistration} className="mt-1" disabled={isLoading}>
-            {/* {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )} */}
+            {isLoading && (
+              <Spinner className="animate-spin mr-2 w-5 h-5" />
+            )}
             Sign In with Email
           </Button>
         </div>
@@ -114,14 +122,29 @@ export function UserAuthForm({ className, ...props }) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {/* {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+
+      <Button variant="outline" type="button" disabled={isLoading} className="bg-github hover:bg-githubHover text-white hover:text-white" >
+
+
+        {isLoading ? (
+          <Spinner className="animate-spin mr-2 w-5 h-5" />
         ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "} */}
+          <GitHub className="mr-1 h-5 w-5" />
+        )}{" "}
         Github
       </Button>
+
+      <Button variant="outline" type="button" disabled={isLoading} className="bg-google hover:bg-googleHover text-white hover:text-white  -mt-2" >
+
+
+        {isLoading ? (
+          <Spinner className="animate-spin mr-2 w-5 h-5" />
+        ) : (
+          <Google className="mr-1 h-5 w-5" />
+        )}{" "}
+        Google
+      </Button>
+
     </div>
   );
 }

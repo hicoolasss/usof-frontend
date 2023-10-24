@@ -26,6 +26,10 @@
     --radius: 0.5rem;
 
     --color: black;
+    --github: #24292e;
+    --github-hover: #555555;
+    --google: #1f4ed6;
+    --google-hover: #4285f4;
 
     --gradient: linear-gradient(to bottom, #FFFFFF, rgb(229 229 229) , #FFFFFF);
   }
@@ -52,7 +56,10 @@
     --ring: 240 4.9% 83.9%;
     
     --color: white;
-
+    --github: #24292e;
+    --github-hover: #555555;
+    --google: #1f4ed6;
+    --google-hover:#4285f4;
     --gradient: linear-gradient(to bottom, #000000, #18181B , #000000);
   }
 }

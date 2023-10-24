@@ -21,6 +21,10 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "#666",
         color: "var(--color)",
+        github: "var(--github)",
+        githubHover: "var(--github-hover)",
+        google: "var(--google)",
+        googleHover: "var(--google-hover)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
