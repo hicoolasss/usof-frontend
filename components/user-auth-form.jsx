@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label";
 
 import Store from "@/store/store";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from 'sonner'
+import { useState, useEffect, useContext } from "react";
+import { Toaster, toast } from 'sonner'
 
 import { GitHub } from "iconoir-react";
 import { Google } from "iconoir-react";
@@ -19,7 +19,9 @@ import Spinner from "@/components/ui/spinner";
 
 
 
+
 export function UserAuthForm({ className, ...props }) {
+
 
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
@@ -28,10 +30,10 @@ export function UserAuthForm({ className, ...props }) {
   const router = useRouter();
 
   const handleRegistration = async () => {
+
     setIsLoading(true);
 
     console.log("onSubmit");
-
     // Используйте значения состояния вместо FormData
     try {
       // Вызываем функцию регистрации
@@ -47,9 +49,21 @@ export function UserAuthForm({ className, ...props }) {
     }
   }
 
+
+
+  const handleRegistrationByGoogle = async () => {
+    try {
+
+      router.push(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/callback/google`)
+
+
+    } catch (error) {
+      console.error('Error during Google registration:', error);
+    }
+  };
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-
       <div >
         <div className="grid gap-2">
           <div className="grid gap-3">
@@ -134,7 +148,7 @@ export function UserAuthForm({ className, ...props }) {
         Github
       </Button>
 
-      <Button variant="outline" type="button" disabled={isLoading} className="bg-google hover:bg-googleHover text-white hover:text-white  -mt-2" >
+      <Button onClick={handleRegistrationByGoogle} variant="outline" type="button" disabled={isLoading} className="bg-google hover:bg-googleHover text-white hover:text-white  -mt-2" >
 
 
         {isLoading ? (

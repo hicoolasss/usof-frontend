@@ -1,14 +1,25 @@
-import axios from "axios";
 import AuthService from "@/services/authService";
 
-class Store {
+export default class Store {
+    user = {};
+    isAuth = false;
+   
 
+    static setAuth(bool) {
+        this.isAuth = bool;
+    }
 
-    async registration(login, email,  password) {
+    static setUser(user) {
+        this.user = user;
+    }
+
+    static async registration(login, email,  password) {
         try {
+            console.log("register")
             const response = await AuthService.registration(login, email,  password);
-            console.log(response);
-            localStorage.setItem('token', response.data.accessToken);
+            localStorage.setItem('token', response.data.data.tokens.accessToken);
+            this.setUser(response.data.data.user);
+            console.log(this.user);
         } catch (error) {
             
             if (error.response) {
@@ -27,7 +38,21 @@ class Store {
         }
     }
 
+    static async checkAuth() {
+        try {
+            const response = await axios.get(`${process.env.API_URL}/api/auth/refresh`, { withCredentials: true });
+            console.log(response);
+            localStorage.setItem('token', response.data.accessToken);
+            this.setAuth(true);
+            console.log(this.isAuth);
+            this.setUser(response.data.user);
+        } catch (e) {
+            console.log(e.response?.data?.message);
+        }
+    }
+
+   
+     
+
 }
 
-const storeInstance = new Store();
-export default storeInstance;
