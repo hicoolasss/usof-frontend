@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-
 import { cn } from "@/lib/utils";
 // import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -12,10 +11,12 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import { Toaster, toast } from 'sonner'
 
+
 import { GitHub } from "iconoir-react";
 import { Google } from "iconoir-react";
-
 import Spinner from "@/components/ui/spinner";
+
+import $api from "@/http";
 
 
 
@@ -27,6 +28,8 @@ export function UserAuthForm({ className, ...props }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+
   const router = useRouter();
 
   const handleRegistration = async () => {
@@ -56,15 +59,19 @@ export function UserAuthForm({ className, ...props }) {
 
       router.push(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/callback/google`)
 
+      // router.push('/home');
+      // toast.success('Registration succssessful!', { duration: 2000 });
 
     } catch (error) {
+
       console.error('Error during Google registration:', error);
+
     }
   };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <div >
+      <div>
         <div className="grid gap-2">
           <div className="grid gap-3">
 

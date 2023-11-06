@@ -10,6 +10,8 @@ import { ModeToggle } from '@/components/theme-swithcer'
 import { Button } from "@/components/ui/button"
 import { redirect } from "next/dist/server/api-utils"
 
+import { cookies } from 'next/headers'
+import { jwtDecode } from "jwt-decode";
 
 export const metadata = {
     title: "Authentication",
@@ -17,6 +19,13 @@ export const metadata = {
 }
 
 export default function AuthenticationPage() {
+    
+    // const cookieStore = cookies()
+    
+    // const refreshToken = cookieStore.get('refreshToken');
+    // const decoded = jwtDecode(refreshToken.value);
+    // console.log("refreshToken:", refreshToken.value);
+    // console.log("decoded:", decoded);
 
     return (
         <>
@@ -37,18 +46,18 @@ export default function AuthenticationPage() {
         />
       </div> */}
 
-      
+
             <div className="container relative grid h-screen flex-col items-center justify-center sm:grid md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-background">
                 <Link
-                    href="/examples/authentication"
+                    href="/login"
                     className={cn(
                         buttonVariants({ variant: "ghost" }),
                         "absolute right-4 top-4 md:right-8 md:top-8"
-                        )}
+                    )}
                 >
                     Login
                 </Link>
-                       
+
                 <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
                     <div className="absolute inset-0 bg-gradient" />
                     <div className="relative z-20 flex items-center text-lg font-medium ">
@@ -111,7 +120,7 @@ export default function AuthenticationPage() {
                     </div>
                 </div>
                 <div className="lg space-y-6 ">
-                    
+
                     <div className="flex flex-col space-y-5 text-center">
                         <h1 className="text-2xl font-semibold tracking-tight sm:text-5xl md:text-5xl lg:text-5xl">
                             Create an account
