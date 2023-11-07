@@ -1,11 +1,12 @@
 import { makeAutoObservable } from "mobx";
 import AuthService from "@/services/authService";
 import axios from "axios";
+import $api from "@/http";
 
 class Store {
     user = {};
     isAuth = false;
-   
+    isCheckingAuth = false;
 
     setAuth(bool) {
         this.isAuth = bool;
@@ -45,17 +46,20 @@ class Store {
     }
 
     async checkAuth() {
-        
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, { withCredentials: true });
-            console.log("response:", response);
+            if (this.isAuth || this.isCheckingAuth) return;
+            this.isCheckingAuth = true;
             console.log("checkAuth")
+            const response = await $api.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, { withCredentials: true });
+            console.log("response:", response);
             localStorage.setItem('token', response.data.data.accessToken);
             this.setAuth(true);
             console.log("this.isAuth", this.isAuth);
             this.setUser(response.data.data.user);
         } catch (e) {
             console.error("Error", e.message);
+        } finally {
+            this.isCheckingAuth = false;
         }
     }
 

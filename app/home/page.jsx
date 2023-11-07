@@ -15,21 +15,27 @@ export default function HomePage() {
     const store = useStore();
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
-    let user = store.user;
+    const [user, setUser] = useState(null);
 
 
     useEffect(() => {
-        async function check() {
+
+        async function checkAuthStatus() {
             try {
                 await store.checkAuth();
-                setIsLoading(false); // Когда аутентификация проверена, снимаем индикатор загрузки
+                setIsLoading(false); // Снимаем индикатор загрузки
+                setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
             } catch (error) {
-                console.log("another error:", error);
+                console.error("Ошибка при проверке аутентификации:", error);
+                setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
             }
-        };
-        if (!store.isAuth) {
-            check();
         }
+
+        // Вызываем асинхронную функцию
+
+        checkAuthStatus().catch(console.error);
+
+
     }, [store]);
 
     if (isLoading) {
