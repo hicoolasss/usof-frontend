@@ -12,16 +12,36 @@ import { Google } from "iconoir-react";
 import { cn } from "@/lib/utils";
 
 import { useRouter } from "next/navigation";
-
+import Store from "@/store/store";
+import { toast } from 'sonner'
 
 
 export default function UserLoginForm({ className, ...props }) {
+    
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
 
     const router = useRouter();
+
+    const handleLogin = async () => {
+        
+        setIsLoading(true);
+        // Используйте значения состояния вместо FormData
+        try {
+          // Вызываем функцию регистрации
+          await Store.login(login, password);
+
+          router.push('/home');
+          toast.success('Login succssessful!', { duration: 2000 });
+    
+        } catch (error) {
+          console.log("another error:", error);
+        } finally {
+          setIsLoading(false);
+        }
+    }
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
@@ -59,7 +79,7 @@ export default function UserLoginForm({ className, ...props }) {
                                 disabled={isLoading}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <Button className="absolute bottom-1 right-1 h-7 w-7" size="icon" variant="ghost">
+                            <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost">
                                 <svg
                                     className=" h-4 w-4"
                                     fill="none"
@@ -80,7 +100,7 @@ export default function UserLoginForm({ className, ...props }) {
                         </div>
                     </div>
 
-                    <Button className="mt-1" disabled={isLoading}>
+                    <Button className="mt-1" disabled={isLoading} onClick={handleLogin}>
                         {isLoading && (
                             <Spinner className="animate-spin mr-2 w-5 h-5" />
                         )}
@@ -88,39 +108,6 @@ export default function UserLoginForm({ className, ...props }) {
                     </Button>
                 </div>
             </div>
-            <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                    </span>
-                </div>
-            </div>
-
-            <Button variant="outline" type="button" disabled={isLoading} className="bg-github hover:bg-githubHover text-white hover:text-white" >
-
-
-                {isLoading ? (
-                    <Spinner className="animate-spin mr-2 w-5 h-5" />
-                ) : (
-                    <GitHub className="mr-1 h-5 w-5" />
-                )}{" "}
-                Github
-            </Button>
-
-            <Button variant="outline" type="button" disabled={isLoading} className="bg-google hover:bg-googleHover text-white hover:text-white  -mt-2" >
-
-
-                {isLoading ? (
-                    <Spinner className="animate-spin mr-2 w-5 h-5" />
-                ) : (
-                    <Google className="mr-1 h-5 w-5" />
-                )}{" "}
-                Google
-            </Button>
-
         </div>
     );
 

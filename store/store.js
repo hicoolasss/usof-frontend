@@ -1,19 +1,25 @@
+import { makeAutoObservable } from "mobx";
 import AuthService from "@/services/authService";
+import axios from "axios";
 
-export default class Store {
+class Store {
     user = {};
     isAuth = false;
    
 
-    static setAuth(bool) {
+    setAuth(bool) {
         this.isAuth = bool;
     }
 
-    static setUser(user) {
+    setUser(user) {
         this.user = user;
     }
 
-    static async registration(login, email,  password) {
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    async registration(login, email,  password) {
         try {
             console.log("register")
             const response = await AuthService.registration(login, email,  password);
@@ -38,21 +44,57 @@ export default class Store {
         }
     }
 
-    static async checkAuth() {
+    async checkAuth() {
+        
         try {
-            const response = await axios.get(`${process.env.API_URL}/api/auth/refresh`, { withCredentials: true });
-            console.log(response);
-            localStorage.setItem('token', response.data.accessToken);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, { withCredentials: true });
+            console.log("response:", response);
+            console.log("checkAuth")
+            localStorage.setItem('token', response.data.data.accessToken);
             this.setAuth(true);
-            console.log(this.isAuth);
-            this.setUser(response.data.user);
+            console.log("this.isAuth", this.isAuth);
+            this.setUser(response.data.data.user);
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async login(login, password) {
+        try {
+            const response = await AuthService.login(login, password);
+            localStorage.setItem('token', response.data.data.tokens.accessToken);
+            this.setUser(response.data.data.user);
+            console.log(this.user);
+        } catch (error) {
+            
+            if (error.response) {
+                // Сервер вернул ответ с кодом ошибки
+                console.error(error.response.data.error); // здесь будет ваше сообщение об ошибке, например, "Username already exists"
+        
+            } else if (error.request) {
+                // Запрос был сделан, но ответ не был получен
+                console.error("No response from server", error.request);
+            } else {
+                // Произошла какая-то другая ошибка при отправке запроса
+                console.error("Error", error.message);
+            }
+
+            throw error;
+        }
+    }
+
+    async logout() {
+        try {
+            await AuthService.logout();
+            localStorage.removeItem('token');
+            this.setAuth(false);
+            this.setUser({});
         } catch (e) {
             console.log(e.response?.data?.message);
         }
     }
 
-   
-     
-
 }
+const store = new Store();
+export default store;
 

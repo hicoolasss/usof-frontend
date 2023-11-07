@@ -51,9 +51,9 @@ export default function AuthenticationPage() {
 
                 <div className="relative hidden h-full flex-col bg-gradient  text-white dark:border-r lg:flex">
 
-                    <div className="w-full h-screen white:hidden">
+                    {/* <div className="w-full h-screen white:hidden">
                         <Scene />
-                    </div>
+                    </div> */}
 
                     <div className="absolute flex items-center p-10 text-lg font-medium right-10">
 

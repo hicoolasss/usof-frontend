@@ -1,32 +1,60 @@
-import React from 'react';
-import { cookies } from 'next/headers'
-import { jwtDecode } from "jwt-decode"; 
+"use client";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { LogOut } from 'lucide-react';
+import { store } from '@/store/store';
+import Cookies from 'js-cookie';
+import { toast } from 'sonner'
+import { useStore } from '@/store/storeContext';
 
 export default function HomePage() {
-    const cookieStore = cookies()
 
-    const refreshToken = cookieStore.get('refreshToken');
-    const decoded = jwtDecode(refreshToken.value);
-    console.log("refreshToken:", refreshToken.value);
-    console.log("decoded:", decoded);
+    const store = useStore();
+    const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    let user = store.user;
 
+
+    useEffect(() => {
+        async function check() {
+            try {
+                await store.checkAuth();
+                setIsLoading(false); // Когда аутентификация проверена, снимаем индикатор загрузки
+            } catch (error) {
+                console.log("another error:", error);
+            }
+        };
+        if (!store.isAuth) {
+            check();
+        }
+    }, [store]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const handleLogout = async () => {
+
+        try {
+            await store.logout();
+            router.push('/');
+            toast.success('Logout succssessful!', { duration: 2000 });
+        } catch (error) {
+            console.log("another error:", error);
+        }
+    }
     return (
         <div>
             <h1>Home Page</h1>
-            
-            <ul>
-                <li>Login: {decoded.login}</li>
-                <li>Full Name: {decoded.full_name}</li>
-                <li>Email: {decoded.email}</li>
-                <li>Is Email Verified: {decoded.is_email_verified.toString()}</li>
-                <li>Profile Picture Path: {decoded.profile_picture_path}</li>
-                <li>Rating: {decoded.rating}</li>
-                <li>Role: {decoded.role}</li>
-                <li>ID: {decoded.id}</li>
-                <li>Issued At (iat): {decoded.iat}</li>
-                <li>Expiration (exp): {decoded.exp}</li>
-            </ul>
 
+            <h2>Hi, {user?.login}!</h2>
+            <Button variant="outline" size="icon" onClick={handleLogout}>
+                <LogOut className="h-4 w-4" />
+            </Button>
         </div>
+
     )
 }
