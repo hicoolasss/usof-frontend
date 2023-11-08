@@ -17,29 +17,62 @@ import { toast } from 'sonner'
 
 
 export default function UserLoginForm({ className, ...props }) {
-    
+
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-
     const router = useRouter();
 
+    const validate = () => {
+        if (!login) {
+            toast.error('Login is required!', { duration: 2000 });
+            return false;
+        }
+        if (!password) {
+            toast.error('Password is required!', { duration: 2000 });
+            return false;
+        }
+        if (login.length < 4) {
+            toast.error('Login must be at least 4 characters!', { duration: 2000 });
+            return false;
+        }
+        if (login.length > 20) {
+            toast.error('Login must be less than 20 characters!', { duration: 2000 });
+            return false;
+        }
+        if (login.search(/\d/) === 1) {
+            toast.error('Login should not contain numbers!', { duration: 2000 });
+            return false;
+        }
+        if (password.length < 4) {
+            toast.error('Password must be at least 4 characters!', { duration: 2000 });
+            return false;
+        }
+        return true;
+    }
+
     const handleLogin = async () => {
-        
+
         setIsLoading(true);
         // Используйте значения состояния вместо FormData
         try {
-          // Вызываем функцию регистрации
-          await Store.login(login, password);
+            if (!validate()) {
+                return;
+            }
+            // Вызываем функцию регистрации
+            await Store.login(login, password);
 
-          router.push('/home');
-          toast.success('Login succssessful!', { duration: 2000 });
-    
+            router.push('/home');
+            toast.success('Login succssessful!', { duration: 2000 });
+
         } catch (error) {
-          console.log("another error:", error);
+            console.log("another error:", error);
+            if (error.response?.data?.error) {
+                toast.error(error.response.data.error, { duration: 2000 });
+            }
         } finally {
-          setIsLoading(false);
+            setIsLoading(false);
         }
     }
 

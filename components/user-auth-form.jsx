@@ -8,21 +8,17 @@ import { Label } from "@/components/ui/label";
 
 import Store from "@/store/store";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useContext } from "react";
-import { Toaster, toast } from 'sonner'
+import { useState } from "react";
+import { toast } from 'sonner'
 
-
-import { GitHub } from "iconoir-react";
-import { Google } from "iconoir-react";
 import Spinner from "@/components/ui/spinner";
 
-import $api from "@/http";
+
 
 
 
 
 export function UserAuthForm({ className, ...props }) {
-
 
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
@@ -32,12 +28,52 @@ export function UserAuthForm({ className, ...props }) {
 
   const router = useRouter();
 
+
+  const validate = () => {
+    if (!login) {
+      toast.error('Login is required!', { duration: 2000 });
+      return false;
+    }
+    if (!email) {
+      toast.error('Email is required!', { duration: 2000 });
+      return false;
+    }
+    if (!password) {
+      toast.error('Password is required!', { duration: 2000 });
+      return false;
+    }
+    if (login.length < 4) {
+      toast.error('Login must be at least 4 characters!', { duration: 2000 });
+      return false;
+    }
+    if (login.length > 20) {
+      toast.error('Login must be less than 20 characters!', { duration: 2000 });
+      return false;
+    }
+    if (login.search(/\d/) === 1) {
+      toast.error('Login should not contain numbers!', { duration: 2000 });
+      return false;
+    }
+    if (email.length < 4) {
+      toast.error('Email must be at least 4 characters!', { duration: 2000 });
+      return false;
+    }
+    if (password.length < 4) {
+      toast.error('Password must be at least 4 characters!', { duration: 2000 });
+      return false;
+    }
+    return true;
+  }
+
   const handleRegistration = async () => {
 
     setIsLoading(true);
 
     console.log("onSubmit");
     // Используйте значения состояния вместо FormData
+    if (!validate()) {
+      return;
+    }
     try {
       // Вызываем функцию регистрации
       await Store.registration(login, email, password);
@@ -47,6 +83,9 @@ export function UserAuthForm({ className, ...props }) {
 
     } catch (error) {
       console.log("another error:", error);
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error, { duration: 2000 });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -54,20 +93,20 @@ export function UserAuthForm({ className, ...props }) {
 
 
 
-  const handleRegistrationByGoogle = async () => {
-    try {
+  // const handleRegistrationByGoogle = async () => {
+  //   try {
 
-      router.push(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/callback/google`)
+  //     router.push(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/callback/google`)
 
-      // router.push('/home');
-      // toast.success('Registration succssessful!', { duration: 2000 });
+  //     // router.push('/home');
+  //     // toast.success('Registration succssessful!', { duration: 2000 });
 
-    } catch (error) {
+  //   } catch (error) {
 
-      console.error('Error during Google registration:', error);
+  //     console.error('Error during Google registration:', error);
 
-    }
-  };
+  //   }
+  // };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -151,7 +190,7 @@ export function UserAuthForm({ className, ...props }) {
           </Button>
         </div>
       </div>
-      
+
 
     </div>
   );
