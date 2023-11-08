@@ -63,7 +63,7 @@ export default function UserLoginForm({ className, ...props }) {
             // Вызываем функцию регистрации
             await Store.login(login, password);
 
-            router.push('/home');
+            router.push('/');
             toast.success('Login succssessful!', { duration: 2000 });
 
         } catch (error) {
