@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import AuthService from "@/services/authService";
-import axios from "axios";
+import Cookies from 'js-cookie';
 import $api from "@/http";
 
 class Store {
@@ -89,12 +89,15 @@ class Store {
 
     async logout() {
         try {
+            if (!this.isAuth) throw new Error("User is not authorized");
+            console.log("logout")
             await AuthService.logout();
             localStorage.removeItem('token');
             this.setAuth(false);
             this.setUser({});
         } catch (e) {
-            console.log(e.response?.data?.message);
+            // console.error("Error", e.message);
+            throw e;
         }
     }
 

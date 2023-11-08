@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { LogOut } from 'lucide-react';
 import { store } from '@/store/store';
-import Cookies from 'js-cookie';
 import { toast } from 'sonner'
 import { useStore } from '@/store/storeContext';
 
@@ -49,7 +48,10 @@ export default function HomePage() {
             router.push('/');
             toast.success('Logout succssessful!', { duration: 2000 });
         } catch (error) {
-            console.log("another error:", error);
+            // console.log("another error:", error.message);
+            if (error.message) {
+                toast.error(error.message, { duration: 2000 });
+            }
         }
     }
     return (

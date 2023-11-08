@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 
 
 export default function Home() {
-  
+
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -24,7 +24,10 @@ export default function Home() {
       router.push('/');
       toast.success('Logout succssessful!', { duration: 2000 });
     } catch (error) {
-      console.log("another error:", error);
+      if (error.message) {
+        toast.error(error.message, { duration: 2000 });
+      }
+      console.error("Error", error.message);
     }
   }
 
