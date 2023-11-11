@@ -33,6 +33,14 @@ export default function Component() {
 
     const [isAuth, setIsAuth] = useState(false);
 
+    const [avatarFile, setAvatarFile] = useState(null);
+
+
+    const handleAvatarChange = (event) => {
+        setAvatarFile(event.target.files[0]);
+        console.log('avatarFile', avatarFile);
+    };
+
     useEffect(() => {
         if (store.user) {
             setEmail(store.user.email); // Обновляем email из store
@@ -47,6 +55,7 @@ export default function Component() {
                 }
             }
         }
+        console.log('store.user.profile_picture_path', store.user.profile_picture_path);
     }, [store.user]);
 
     useEffect(() => {
@@ -77,13 +86,25 @@ export default function Component() {
             console.error('User ID is undefined.');
             return;
         }
+
         try {
             console.log('user', user);
             const full_name = `${firstName} ${lastName}`;
             // Отправляем обновленные данные на сервер
             const response = await store.updateUser({ full_name, email, password }, user.id);
-            console.log(response);
-            
+            //console.log(response);
+
+            if (avatarFile) {
+                const avatarResponse = await store.uploadUserAvatar(user.id, avatarFile);
+                console.log("avatarResponse", avatarResponse);
+                // Обновляем данные пользователя с новым аватаром
+                setUser({ ...response, profile_picture_path: avatarResponse.profile_picture_path });
+                setAvatarFile(avatarResponse.profile_picture_path);
+            } else {
+                // Обновляем данные пользователя без изменения аватара
+                setUser(response);
+            }
+
             // Обновляем данные пользователя в состоянии
             setUser(response);
         }
@@ -98,6 +119,8 @@ export default function Component() {
             toast.success('User updated successfully!', { duration: 2000 });
         }
     }
+
+
 
 
     return (
@@ -156,7 +179,8 @@ export default function Component() {
                                 <Image alt="User Avatar"
                                     className="rounded-full"
                                     height="48"
-                                    src={userAvatar}
+                                    
+                                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}` || user.profile_picture_path || userAvatar}
                                     style={{
                                         aspectRatio: "48/48",
                                         objectFit: "cover",
@@ -166,9 +190,10 @@ export default function Component() {
 
                                 </Image>
 
-                                <Button className="border-border dark:text-gray-300" variant="outline">
-                                    Change Avatar
-                                </Button>
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="picture">Picture</Label>
+                                    <Input id="picture" type="file" onChange={handleAvatarChange} />
+                                </div>
                             </div>
                         </div>
                         <div className="space-y-2">

@@ -20,19 +20,19 @@ class Store {
         makeAutoObservable(this);
     }
 
-    async registration(login, email,  password) {
+    async registration(login, email, password) {
         try {
             console.log("register")
-            const response = await AuthService.registration(login, email,  password);
+            const response = await AuthService.registration(login, email, password);
             localStorage.setItem('token', response.data.data.tokens.accessToken);
             this.setUser(response.data.data.user);
             console.log(this.user);
         } catch (error) {
-            
+
             if (error.response) {
                 // Сервер вернул ответ с кодом ошибки
                 console.error(error.response.data.error); // здесь будет ваше сообщение об ошибке, например, "Username already exists"
-        
+
             } else if (error.request) {
                 // Запрос был сделан, но ответ не был получен
                 console.error("No response from server", error.request);
@@ -70,11 +70,11 @@ class Store {
             this.setUser(response.data.data.user);
             console.log(this.user);
         } catch (error) {
-            
+
             if (error.response) {
                 // Сервер вернул ответ с кодом ошибки
                 console.error(error.response.data.error); // здесь будет ваше сообщение об ошибке, например, "Username already exists"
-        
+
             } else if (error.request) {
                 // Запрос был сделан, но ответ не был получен
                 console.error("No response from server", error.request);
@@ -105,10 +105,31 @@ class Store {
         try {
             console.log("updateUser")
             const response = await userService.updateUser(user, id);
-            console.log("response:", response);
+            // console.log("response:", response);
             this.setUser(response.data.data.user);
-            console.log(this.user);
+            // console.log(this.user);
             return this.user; // Возвращает обновленные данные пользователя
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async uploadUserAvatar(userId, file) {
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            const response = await userService.uploadUserAvatar(userId, formData);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getUserById(userId) {
+        try {
+            const response = await userService.getUserById(userId);
+            return response.data.data.user;
         } catch (e) {
             console.error("Error", e.message);
         }
