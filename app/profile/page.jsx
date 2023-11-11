@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
 import { useStore } from '@/store/storeContext';
+import { set } from "mobx"
 
 export default function Component() {
 
@@ -37,26 +38,41 @@ export default function Component() {
 
 
     const handleAvatarChange = (event) => {
-        setAvatarFile(event.target.files[0]);
+        if (event.target.files) {
+            setAvatarFile(event.target.files[0]);
+        }
         console.log('avatarFile', avatarFile);
     };
 
-    useEffect(() => {
-        if (store.user) {
-            setEmail(store.user.email); // Обновляем email из store
-            setPassword(store.user.password); // Обновляем password из store
+    const handleAvatarSave = async () => {
+        setIsLoading(true);
+
+        if (!user || !user.id) {
+            console.error('User ID is undefined.');
+            return;
         }
-        if (store.user && store.user.full_name) {
-            const parts = store.user.full_name.split(' ');
-            if (parts.length > 0) {
-                setFirstName(parts[0]);
-                if (parts.length > 1) {
-                    setLastName(parts.slice(1).join(' '));
-                }
+
+        try {
+            // Отправляем обновленные данные на сервер
+            const response = await store.uploadUserAvatar(user.id, avatarFile);
+            setUser({...user, profile_picture_path: response.data.data.userData.profile_picture_path});
+            console.log(response);
+
+        }
+        catch (error) {
+            if (error.message) {
+                toast.error(error.message, { duration: 2000 });
+                console.error("Error", error.message);
             }
         }
-        console.log('store.user.profile_picture_path', store.user.profile_picture_path);
-    }, [store.user]);
+        finally {
+            setIsLoading(false);
+            toast.success('Avatar updated successfully!', { duration: 2000 });
+        }
+    }
+
+
+
 
     useEffect(() => {
 
@@ -94,19 +110,6 @@ export default function Component() {
             const response = await store.updateUser({ full_name, email, password }, user.id);
             //console.log(response);
 
-            if (avatarFile) {
-                const avatarResponse = await store.uploadUserAvatar(user.id, avatarFile);
-                console.log("avatarResponse", avatarResponse);
-                // Обновляем данные пользователя с новым аватаром
-                setUser({ ...response, profile_picture_path: avatarResponse.profile_picture_path });
-                setAvatarFile(avatarResponse.profile_picture_path);
-            } else {
-                // Обновляем данные пользователя без изменения аватара
-                setUser(response);
-            }
-
-            // Обновляем данные пользователя в состоянии
-            setUser(response);
         }
         catch (error) {
             if (error.message) {
@@ -176,23 +179,30 @@ export default function Component() {
                             </Label>
                             <div className="flex items-center gap-3">
 
-                                <Image alt="User Avatar"
-                                    className="rounded-full"
-                                    height="48"
-                                    
-                                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}` || user.profile_picture_path || userAvatar}
-                                    style={{
-                                        aspectRatio: "48/48",
-                                        objectFit: "cover",
-                                    }}
-                                    width="48">
-
-
-                                </Image>
+                                {user.profile_picture_path ? (
+                                    <Image
+                                        key={user.profile_picture_path}
+                                        alt="User Avatar"
+                                        className="rounded-full"
+                                        height="48"
+                                        src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}?v=${new Date().getTime()}`}
+                                        style={{ aspectRatio: "48/48", objectFit: "cover" }}
+                                        width="48"
+                                    />
+                                ) : (
+                                    <Image
+                                        alt="User Avatar"
+                                        className="rounded-full"
+                                        height="48"
+                                        src={userAvatar}
+                                        style={{ aspectRatio: "48/48", objectFit: "cover" }}
+                                        width="48"
+                                    />
+                                )}
 
                                 <div className="grid w-full max-w-sm items-center gap-1.5">
                                     <Label htmlFor="picture">Picture</Label>
-                                    <Input id="picture" type="file" onChange={handleAvatarChange} />
+                                    <Input id="picture" type="file" onChange={handleAvatarChange}/>
                                 </div>
                             </div>
                         </div>
@@ -248,6 +258,7 @@ export default function Component() {
                     </CardContent>
                 </Card>
                 <Button className="w-full" onClick={handleSaveChanges}>Save Changes</Button>
+                <Button className="w-full" onClick={handleAvatarSave}>Save Avatar</Button>
             </div>
         </div>
     )

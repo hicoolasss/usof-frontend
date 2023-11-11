@@ -4,15 +4,8 @@ const nextConfig = {
         API_URL: "http://localhost:1000",
     },
     images: {
-        remotePatterns: [
-          {
-            protocol: 'http',
-            hostname: 'localhost',
-            port: '1000',
-            pathname: '/uploads/**',
-          },
-        ],
-      },
+      domains: ['localhost'], // или другой домен, откуда загружаются изображения
+    },
 }
 
 module.exports = nextConfig
