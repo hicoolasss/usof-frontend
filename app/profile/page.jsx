@@ -2,15 +2,104 @@
  * v0 by Vercel.
  * @see https://v0.dev/t/LwqZEBWXtb8
  */
+"use client"
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import userAvatar from "../../resources/images/avatars/avatar1.jpg"
+import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+
+import { useStore } from '@/store/storeContext';
 
 export default function Component() {
+
+    const store = useStore();
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [firstName, setFirstName] = useState('');
+
+    const [lastName, setLastName] = useState('');
+
+    const [email, setEmail] = useState('');
+
+    const [password, setPassword] = useState('');
+
+    const [user, setUser] = useState(store.user);
+
+    const [isAuth, setIsAuth] = useState(false);
+
+    useEffect(() => {
+        if (store.user) {
+            setEmail(store.user.email); // Обновляем email из store
+            setPassword(store.user.password); // Обновляем password из store
+        }
+        if (store.user && store.user.full_name) {
+            const parts = store.user.full_name.split(' ');
+            if (parts.length > 0) {
+                setFirstName(parts[0]);
+                if (parts.length > 1) {
+                    setLastName(parts.slice(1).join(' '));
+                }
+            }
+        }
+    }, [store.user]);
+
+    useEffect(() => {
+
+        async function checkAuthStatus() {
+            try {
+                await store.checkAuth();
+                setIsLoading(false); // Снимаем индикатор загрузки
+                setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
+            } catch (error) {
+                console.error("Ошибка при проверке аутентификации:", error);
+                setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
+            } finally {
+                setIsLoading(false);
+                setIsAuth(store.isAuth);
+            }
+        }
+        // Вызываем асинхронную функцию
+        checkAuthStatus().catch(console.error);
+
+    }, [store]);
+
+
+    const handleSaveChanges = async () => {
+        setIsLoading(true);
+
+        if (!user || !user.id) {
+            console.error('User ID is undefined.');
+            return;
+        }
+        try {
+            console.log('user', user);
+            const full_name = `${firstName} ${lastName}`;
+            // Отправляем обновленные данные на сервер
+            const response = await store.updateUser({ full_name, email, password }, user.id);
+            console.log(response);
+            
+            // Обновляем данные пользователя в состоянии
+            setUser(response);
+        }
+        catch (error) {
+            if (error.message) {
+                toast.error(error.message, { duration: 2000 });
+                console.error("Error", error.message);
+            }
+        }
+        finally {
+            setIsLoading(false);
+            toast.success('User updated successfully!', { duration: 2000 });
+        }
+    }
+
+
     return (
         <div className="w-full h-screen max-w-lg mx-auto bg-backgorund flex items-center justify-center">
             <div className="space-y-6 self-center">
@@ -25,13 +114,37 @@ export default function Component() {
                                 <Label className="dark:text-gray-200" htmlFor="first-name">
                                     First name
                                 </Label>
-                                <Input id="first-name" placeholder="Enter your first name" required />
+                                <Input
+                                    id="first-name"
+                                    name="first-name"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
+                                    disabled={isLoading}
+                                    placeholder="Enter your first name"
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    required
+
+
+                                />
+
                             </div>
                             <div className="space-y-2">
                                 <Label className="dark:text-gray-200" htmlFor="last-name">
                                     Last name
                                 </Label>
-                                <Input id="last-name" placeholder="Enter your last name" required />
+                                <Input
+                                    id="last-name"
+                                    name="last-name"
+                                    type="text"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
+                                    disabled={isLoading}
+                                    placeholder="Enter your last name"
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    required
+                                // id="last-name" placeholder="Enter your last name" required 
+                                />
                             </div>
                         </div>
                         <div className="space-y-2">
@@ -77,17 +190,39 @@ export default function Component() {
                             <Label className="dark:text-gray-200" htmlFor="email">
                                 Email
                             </Label>
-                            <Input id="email" placeholder="Enter your email" required type="email" />
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                disabled={isLoading}
+                                placeholder="Enter your email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            // id="email" placeholder="Enter your email" required type="email" 
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label className="dark:text-gray-200" htmlFor="password">
                                 Password
                             </Label>
-                            <Input id="password" placeholder="Enter your password" required type="password" />
+                            <Input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                disabled={isLoading}
+                                placeholder="Enter your password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            // id="password" placeholder="Enter your password" required type="password"
+                            />
                         </div>
                     </CardContent>
                 </Card>
-                <Button className="w-full">Save Changes</Button>
+                <Button className="w-full" onClick={handleSaveChanges}>Save Changes</Button>
             </div>
         </div>
     )

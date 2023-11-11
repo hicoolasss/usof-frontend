@@ -32,7 +32,9 @@ export default function Home() {
       try {
         await store.checkAuth();
         setIsLoading(false); // Снимаем индикатор загрузки
+        console.log(store.user);
         setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
+
 
       } catch (error) {
         console.error("Ошибка при проверке аутентификации:", error);
@@ -68,7 +70,9 @@ export default function Home() {
 
       <h1>Hello, it&apos;s home page!</h1>
 
-      <ModeToggle />
+      <div className='mt-5'>
+        <ModeToggle />
+      </div>
 
       <Button variant="link" type="button" className="mt-5">
         <Link href="/registration">
@@ -82,16 +86,28 @@ export default function Home() {
         </Link>
       </Button>
 
+      <Button variant="link" type="button" className="mt-5">
+        <Link href="/home">
+          Go to Home
+        </Link>
+      </Button>
+
+      <Button variant="link" type="button" className="mt-5">
+        <Link href="/profile">
+          Go to Profile
+        </Link>
+      </Button>
+
       <Button variant="outline" size="icon" onClick={handleLogout} className="mt-5">
         <LogOut className="h-4 w-4" />
       </Button>
 
 
-    <div className='mt-5'>
-    
-    {isLoading ? <Spinner className="animate-spin mr-2 w-5 h-5" /> : (isAuth || !isAuth) ? <h1>Hi, {user?.login}!</h1> : <h1>Hi, Guest</h1>}
+      <div className='mt-5'>
 
-    </div>
+        {isLoading ? <Spinner className="animate-spin mr-2 w-5 h-5" /> : (isAuth || !isAuth) ? <h1>Hi, {user?.login}!</h1> : <h1>Hi, Guest</h1>}
+
+      </div>
 
 
 

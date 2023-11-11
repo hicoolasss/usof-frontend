@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import AuthService from "@/services/authService";
 import Cookies from 'js-cookie';
 import $api from "@/http";
-
+import userService from "@/services/userService";
 class Store {
     user = {};
     isAuth = false;
@@ -98,6 +98,19 @@ class Store {
         } catch (e) {
             // console.error("Error", e.message);
             throw e;
+        }
+    }
+
+    async updateUser(user, id) {
+        try {
+            console.log("updateUser")
+            const response = await userService.updateUser(user, id);
+            console.log("response:", response);
+            this.setUser(response.data.data.user);
+            console.log(this.user);
+            return this.user; // Возвращает обновленные данные пользователя
+        } catch (e) {
+            console.error("Error", e.message);
         }
     }
 
