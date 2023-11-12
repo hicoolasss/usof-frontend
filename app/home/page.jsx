@@ -19,7 +19,7 @@ export default function Component() {
         <div className="flex flex-col min-h-screen bg-background ">
             <header className="w-full h-16 px-4 md:px-6 flex items-center justify-between  border-b border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center ">
-                    <Button variant="link" className="text-xl font-bold text-color" href="#">
+                    <Button variant="link" className="text-xl font-bold text-color " href="#">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24px"
@@ -67,22 +67,22 @@ export default function Component() {
                     </Button>
 
                     <nav className="hidden lg:flex ">
-                        <Button variant="link"
+                        <Button variant="ghost"
                             className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                         >
                             <Link href="/home">Home</Link>
                         </Button>
-                        <Button variant="link"
+                        <Button variant="ghost"
                             className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"   
                         >
                             <Link href="/profile">Profile</Link>
                         </Button>
-                        <Button variant="link"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                        <Button variant="ghost"
+                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300" 
                         >
                             <Link href="/posts">Posts</Link>
                         </Button>
-                        <Button variant="link"
+                        <Button variant="ghost"
                             className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                         >
                             <Link href="/users">Users</Link>

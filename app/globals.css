@@ -30,6 +30,7 @@
     --github-hover: #555555;
     --google: #1f4ed6;
     --google-hover: #4285f4;
+    --hover: #292929;
 
     --gradient: linear-gradient(to bottom, #FFFFFF, rgb(229 229 229) , #FFFFFF);
   }
@@ -60,6 +61,8 @@
     --github-hover: #555555;
     --google: #1f4ed6;
     --google-hover:#4285f4;
+    --hover: #292929;
+
     --gradient: linear-gradient(to bottom, #000000, #141415 , #000000);
   }
 }

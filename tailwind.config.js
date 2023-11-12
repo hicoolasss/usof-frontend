@@ -25,6 +25,7 @@ module.exports = {
         githubHover: "var(--github-hover)",
         google: "var(--google)",
         googleHover: "var(--google-hover)",
+        hover: "var(--hover)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
         primary: {

@@ -14,7 +14,9 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
 import { useStore } from '@/store/storeContext';
-import { set } from "mobx"
+import Link from "next/link"
+
+import { Slash } from "iconoir-react"
 
 export default function Component() {
 
@@ -55,7 +57,7 @@ export default function Component() {
         try {
             // Отправляем обновленные данные на сервер
             const response = await store.uploadUserAvatar(user.id, avatarFile);
-            setUser({...user, profile_picture_path: response.data.data.userData.profile_picture_path});
+            setUser({ ...user, profile_picture_path: response.data.data.userData.profile_picture_path });
             console.log(response);
 
         }
@@ -70,6 +72,14 @@ export default function Component() {
             toast.success('Avatar updated successfully!', { duration: 2000 });
         }
     }
+
+
+    // useEffect(() => {
+    //     setFirstName(store.user?.full_name?.split(' ')[0]);
+    //     setLastName(store.user?.full_name?.split(' ')[1]);
+    //     setEmail(store.user?.email);
+    //     setPassword(store.user?.password);
+    // }, [store.user]);
 
 
 
@@ -127,15 +137,111 @@ export default function Component() {
 
 
     return (
-        <div className="w-full h-screen max-w-lg mx-auto bg-backgorund flex items-center justify-center">
-            <div className="space-y-6 self-center">
-                <h1 className="text-3xl font-bold text-center text-color">Edit User</h1>
+        <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start">
+            <div className="absolute left-5 top-5 flex flex-row">
+                <Button variant="link" className="text-xl text-color left-5 top-5 p-0" href="#">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        fill="none"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        color="var(--color)"
+                    >
+                        <rect
+                            width={7}
+                            height={5}
+                            x={3}
+                            y={2}
+                            stroke="var(--color)"
+                            strokeWidth="2"
+                            rx="0.6"
+                        />
+                        <rect
+                            width={7}
+                            height={5}
+                            x="8.5"
+                            y={17}
+                            stroke="var(--color)"
+                            strokeWidth="2"
+                            rx="0.6"
+                        />
+                        <rect
+                            width={7}
+                            height={5}
+                            x={14}
+                            y={2}
+                            stroke="var(--color)"
+                            strokeWidth="2"
+                            rx="0.6"
+                        />
+                        <path
+                            stroke="var(--color)"
+                            strokeWidth="2"
+                            d="M6.5 7v3.5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7M12 12.5V17"
+                        />
+                    </svg>
+
+                    <Link href="/">Smack Overslow</Link>
+                    <Slash />
+                </Button>
+                <Button variant="link" className="text-xl text-color p-0">
+                    <Link href="/profile">Profile</Link>
+                </Button>
+
+            </div>
+            <div className="mx-auto flex flex-col space-y-5 p-5 lg:flex-row lg:space-x-5 lg:space-y-0 mt-16">
                 <Card className="space-y-4 bg-backgorund">
                     <CardHeader>
-                        <CardTitle className="text-color">Personal Information</CardTitle>
+                        <CardTitle className="text-color">Avatar</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="space-y-4">
+
+                        <div className="space-y-2">
+
+                            <div className="flex flex-col items-center gap-3">
+
+                                {user.profile_picture_path ? (
+                                    <Image
+                                        key={user.profile_picture_path}
+                                        alt="User Avatar"
+                                        className="rounded-full"
+                                        height="96"
+                                        src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`}
+                                        style={{ aspectRatio: "96/96", objectFit: "cover" }}
+                                        width="96"
+                                        quality={100}
+                                    />
+                                ) : (
+                                    <Image
+                                        alt="User Avatar"
+                                        className="rounded-full"
+                                        height="96"
+                                        src={userAvatar}
+                                        style={{ aspectRatio: "96/96", objectFit: "cover" }}
+                                        width="96"
+                                    />
+                                )}
+
+                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                    <Label htmlFor="picture">Pick Avatar</Label>
+                                    <Input id="picture" type="file" onChange={handleAvatarChange} />
+                                </div>
+                                <Button className="w-full" onClick={handleAvatarSave}  disabled={!avatarFile || isLoading}>Save Avatar</Button>
+                            </div>
+                        </div>
+
+                    </CardContent>
+                </Card>
+
+                <Card className="space-y-4 bg-background">
+                    <CardHeader>
+                        <CardTitle className="dark:text-white">Login Information</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label className="dark:text-gray-200" htmlFor="first-name">
                                     First name
@@ -174,54 +280,6 @@ export default function Component() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <Label className="dark:text-gray-200" htmlFor="avatar">
-                                Avatar
-                            </Label>
-                            <div className="flex items-center gap-3">
-
-                                {user.profile_picture_path ? (
-                                    <Image
-                                        key={user.profile_picture_path}
-                                        alt="User Avatar"
-                                        className="rounded-full"
-                                        height="48"
-                                        src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}?v=${new Date().getTime()}`}
-                                        style={{ aspectRatio: "48/48", objectFit: "cover" }}
-                                        width="48"
-                                    />
-                                ) : (
-                                    <Image
-                                        alt="User Avatar"
-                                        className="rounded-full"
-                                        height="48"
-                                        src={userAvatar}
-                                        style={{ aspectRatio: "48/48", objectFit: "cover" }}
-                                        width="48"
-                                    />
-                                )}
-
-                                <div className="grid w-full max-w-sm items-center gap-1.5">
-                                    <Label htmlFor="picture">Picture</Label>
-                                    <Input id="picture" type="file" onChange={handleAvatarChange}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="dark:text-gray-200">Rating Score</Label>
-                            <p className="text-lg dark:text-gray-300">4.5</p>
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="dark:text-gray-200">Role</Label>
-                            <p className="text-lg dark:text-gray-300">Admin</p>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="space-y-4 bg-background">
-                    <CardHeader>
-                        <CardTitle className="dark:text-white">Login Information</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
                             <Label className="dark:text-gray-200" htmlFor="email">
                                 Email
                             </Label>
@@ -238,7 +296,7 @@ export default function Component() {
                             // id="email" placeholder="Enter your email" required type="email" 
                             />
                         </div>
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                             <Label className="dark:text-gray-200" htmlFor="password">
                                 Password
                             </Label>
@@ -254,11 +312,30 @@ export default function Component() {
                                 required
                             // id="password" placeholder="Enter your password" required type="password"
                             />
+                        </div> */}
+                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || !email || isLoading}>Save Changes</Button>
+                    </CardContent>
+                </Card>
+                <Card className="space-y-4 bg-background">
+                    <CardHeader>
+                        <CardTitle className="text-color">Personal Information</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="space-y-4">
+                        <div className="space-x-2 flex flex-row items-center">
+                            <p className="dark:text-gray-200">Rating Score - </p>
+                            <p className="text-lg font-bold dark:text-gray-300">4.5</p>
+                        </div>
+                        <div className="space-x-2 flex flex-row items-center ">
+                            <p className="dark:text-gray-200">Role - </p>
+                            <p className="text-lg font-bold dark:text-gray-300">User</p>
+                        </div>
+                        <div className="space-x-2 flex flex-row items-center ">
+                            <p className="dark:text-gray-200">Email - </p>
+                            <Button>Verify</Button>
                         </div>
                     </CardContent>
                 </Card>
-                <Button className="w-full" onClick={handleSaveChanges}>Save Changes</Button>
-                <Button className="w-full" onClick={handleAvatarSave}>Save Avatar</Button>
             </div>
         </div>
     )
