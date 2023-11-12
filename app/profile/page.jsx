@@ -17,10 +17,14 @@ import { useStore } from '@/store/storeContext';
 import Link from "next/link"
 
 import { Slash } from "iconoir-react"
+import Spinner from "@/components/ui/spinner"
+import { useRouter } from "next/navigation";
 
 export default function Component() {
 
     const store = useStore();
+
+    const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -72,20 +76,9 @@ export default function Component() {
             toast.success('Avatar updated successfully!', { duration: 2000 });
         }
     }
-
-
-    // useEffect(() => {
-    //     setFirstName(store.user?.full_name?.split(' ')[0]);
-    //     setLastName(store.user?.full_name?.split(' ')[1]);
-    //     setEmail(store.user?.email);
-    //     setPassword(store.user?.password);
-    // }, [store.user]);
-
-
-
-
     useEffect(() => {
 
+        setIsLoading(true); // Устанавливаем индикатор загрузки
         async function checkAuthStatus() {
             try {
                 await store.checkAuth();
@@ -95,8 +88,8 @@ export default function Component() {
                 console.error("Ошибка при проверке аутентификации:", error);
                 setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
             } finally {
-                setIsLoading(false);
                 setIsAuth(store.isAuth);
+                setIsLoading(false);
             }
         }
         // Вызываем асинхронную функцию
@@ -133,7 +126,32 @@ export default function Component() {
         }
     }
 
+    const handleVerifyEmail = async () => {
+        setIsLoading(true);
 
+        if (!user || !user.id) {
+            console.error('User ID is undefined.');
+            return;
+        }
+
+        try {
+            // Отправляем обновленные данные на сервер
+            const response = await store.verifyEmail(user.email);
+            router.push('/verify');
+            console.log(response);
+
+        }
+        catch (error) {
+            if (error.message) {
+                toast.error(error.message, { duration: 2000 });
+                console.error("Error", error.message);
+            }
+        }
+        finally {
+            setIsLoading(false);
+            toast.success('Verification link sent to your email!', { duration: 2000 });
+        }
+    }
 
 
     return (
@@ -229,7 +247,12 @@ export default function Component() {
                                     <Label htmlFor="picture">Pick Avatar</Label>
                                     <Input id="picture" type="file" onChange={handleAvatarChange} />
                                 </div>
-                                <Button className="w-full" onClick={handleAvatarSave}  disabled={!avatarFile || isLoading}>Save Avatar</Button>
+                                <Button className="w-full" onClick={handleAvatarSave} disabled={!avatarFile || isLoading}>
+                                    Save Avatar
+                                    {isLoading && (
+                                        <Spinner className="animate-spin mr-2 w-5 h-5" />
+                                    )}
+                                </Button>
                             </div>
                         </div>
 
@@ -332,7 +355,7 @@ export default function Component() {
                         </div>
                         <div className="space-x-2 flex flex-row items-center ">
                             <p className="dark:text-gray-200">Email - </p>
-                            <Button>Verify</Button>
+                            <Button onClick={handleVerifyEmail}>Verify</Button>
                         </div>
                     </CardContent>
                 </Card>

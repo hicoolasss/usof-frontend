@@ -3,6 +3,7 @@ import AuthService from "@/services/authService";
 import Cookies from 'js-cookie';
 import $api from "@/http";
 import userService from "@/services/userService";
+
 class Store {
     user = {};
     isAuth = false;
@@ -121,6 +122,15 @@ class Store {
 
             const response = await userService.uploadUserAvatar(userId, formData);
             return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async verifyEmail(email) {
+        try {
+            const response = await AuthService.verifyEmail(email);
+            return response.data.message;
         } catch (e) {
             console.error("Error", e.message);
         }

@@ -16,4 +16,8 @@ export default class AuthService {
         return $api.post('api/auth/logout');
     }
 
+    static async verifyEmail(email) {
+        return $api.post(`api/auth/verify`, { email });
+    }
+
 }
