@@ -74,7 +74,7 @@ export default function Component() {
                                 gradientUnits="userSpaceOnUse"
                             >
                                 <stop stopOpacity={0} />
-                                <stop offset="0.46311" stopColor="var(--background)" />
+                                <stop offset="0.46311" stopColor="#0A0A0B" />
                                 <stop offset={1} stopOpacity={0} />
                             </linearGradient>
                             <linearGradient
