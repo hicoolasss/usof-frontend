@@ -2,18 +2,40 @@
  * v0 by Vercel.
  * @see https://v0.dev/t/rvDhDittPGA
  */
+"use client";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/theme-swithcer"
 import Image from "next/image"
 import userAvatar from "../../resources/images/avatars/avatar1.jpg"
-
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input"
 import { Search } from "iconoir-react"
 
-export default function Component() {
+import { useStore } from '@/store/storeContext';
+import { observer } from "mobx-react"
 
+export default function Component() {
+    const store = useStore();
+
+    const router = useRouter();
+
+    const [isLoading, setIsLoading] = useState(true);
+    
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUserData = localStorage.getItem('userData');
+        console.log(storedUserData);
+
+        if (storedUserData) {
+            // Инициализируем состояние данными пользователя из localStorage
+            setUser(JSON.parse(storedUserData));
+            setIsLoading(false);
+        }
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen bg-background ">
@@ -63,7 +85,7 @@ export default function Component() {
                             />
                         </svg>
                         <Link href="/">Smack Overslow</Link>
-                        
+
                     </Button>
 
                     <nav className="hidden lg:flex ">
@@ -72,13 +94,15 @@ export default function Component() {
                         >
                             <Link href="/home">Home</Link>
                         </Button>
-                        <Button variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"   
+                        {user ? ( <Button variant="ghost"
+                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                         >
                             <Link href="/profile">Profile</Link>
-                        </Button>
+                        </Button>) 
+                        : (null)}
+                        
                         <Button variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300" 
+                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                         >
                             <Link href="/posts">Posts</Link>
                         </Button>
@@ -88,8 +112,8 @@ export default function Component() {
                             <Link href="/users">Users</Link>
                         </Button>
                         <div className="relative justify-self-start hidden lg:flex items-center w-64 ml-8">
-                            <Button variant="ghost" size="icon" className="absolute"><Search className="w-5 h-5"/></Button>
-                            
+                            <Button variant="ghost" size="icon" className="absolute"><Search className="w-5 h-5" /></Button>
+
                             <Input className="indent-8"
                                 placeholder="Search"
                             >
@@ -102,10 +126,17 @@ export default function Component() {
 
                 <div className="flex items-center space-x-4">
                     <div ><ModeToggle /></div>
-
-                    <Button className="hidden lg:inline-flex" variant="outline">
-                        Sign Out
-                    </Button>
+                    {user ? (
+                        <Button className="hidden lg:inline-flex" variant="outline">
+                            Sign Out
+                        </Button>) : (
+                        <Button variant="ghost"
+                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                        >
+                            <Link href="/login">Log in</Link>
+                        </Button>
+                    )
+                    }
                     <Image
                         alt="User Avatar"
                         className="rounded-full"

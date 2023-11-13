@@ -32,7 +32,7 @@ export default function Home() {
       try {
         await store.checkAuth();
         setIsLoading(false); // Снимаем индикатор загрузки
-        console.log(store.user);
+        console.log(store.isAuth);
         setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
 
 
@@ -52,7 +52,6 @@ export default function Home() {
   const handleLogout = async () => {
 
     try {
-      setIsAuth(false);
       await Store.logout();
       router.push('/');
       toast.success('Logout succssessful!', { duration: 2000 });

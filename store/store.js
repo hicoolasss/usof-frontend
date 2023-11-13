@@ -50,19 +50,35 @@ class Store {
         try {
             if (this.isAuth || this.isCheckingAuth) return;
             this.isCheckingAuth = true;
-            console.log("checkAuth")
+    
+            // Попытка восстановить данные пользователя из localStorage
+            const storedUser = localStorage.getItem('userData');
+            
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                this.setUser(userData);
+                this.setAuth(true);
+                return; // Пользователь уже аутентифицирован
+            }
+    
             const response = await $api.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, { withCredentials: true });
             console.log("response:", response);
+    
             localStorage.setItem('token', response.data.data.accessToken);
+            localStorage.setItem('userData', JSON.stringify(response.data.data.user));
+    
             this.setAuth(true);
-            console.log("this.isAuth", this.isAuth);
             this.setUser(response.data.data.user);
         } catch (e) {
             console.error("Error", e.message);
+            // В случае ошибки, можно также очистить localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
         } finally {
             this.isCheckingAuth = false;
         }
     }
+    
 
     async login(login, password) {
         try {
@@ -94,6 +110,7 @@ class Store {
             console.log("logout")
             await AuthService.logout();
             localStorage.removeItem('token');
+            localStorage.removeItem('userData');
             this.setAuth(false);
             this.setUser({});
         } catch (e) {
