@@ -16,11 +16,29 @@ import { toast } from 'sonner'
 import Spinner from '@/components/ui/spinner';
 
 
+export const useLogout = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+      try {
+          await Store.logout();
+          router.push('/');
+          toast.success('Logout successful!', { duration: 2000 });
+      } catch (error) {
+          if (error.message) {
+              toast.error(error.message, { duration: 2000 });
+          }
+          console.error("Error", error.message);
+      }
+  };
+
+  return handleLogout;
+};
 
 export default function Home() {
 
   const store = useStore();
-  const router = useRouter();
+  const logout = useLogout();
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
@@ -49,19 +67,6 @@ export default function Home() {
 
   }, [store]);
 
-  const handleLogout = async () => {
-
-    try {
-      await Store.logout();
-      router.push('/');
-      toast.success('Logout succssessful!', { duration: 2000 });
-    } catch (error) {
-      if (error.message) {
-        toast.error(error.message, { duration: 2000 });
-      }
-      console.error("Error", error.message);
-    }
-  }
 
   return (
 
@@ -97,7 +102,7 @@ export default function Home() {
         </Link>
       </Button>
 
-      <Button variant="outline" size="icon" onClick={handleLogout} className="mt-5">
+      <Button variant="outline" size="icon" onClick={logout} className="mt-5">
         <LogOut className="h-4 w-4" />
       </Button>
 
@@ -115,5 +120,7 @@ export default function Home() {
 
   );
 }
+
+
 
 

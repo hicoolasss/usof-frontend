@@ -16,14 +16,15 @@ import { Search } from "iconoir-react"
 
 import { useStore } from '@/store/storeContext';
 import { observer } from "mobx-react"
+import { useLogout } from "../page";
 
 export default function Component() {
     const store = useStore();
 
-    const router = useRouter();
+    const logout = useLogout();
 
     const [isLoading, setIsLoading] = useState(true);
-    
+
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -127,7 +128,7 @@ export default function Component() {
                 <div className="flex items-center space-x-4">
                     <div ><ModeToggle /></div>
                     {user ? (
-                        <Button className="hidden lg:inline-flex" variant="outline">
+                        <Button className="hidden lg:inline-flex" variant="outline" onClick={logout}>
                             Sign Out
                         </Button>) : (
                         <Button variant="ghost"

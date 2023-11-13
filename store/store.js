@@ -138,6 +138,8 @@ class Store {
             formData.append('avatar', file);
 
             const response = await userService.uploadUserAvatar(userId, formData);
+            localStorage.setItem('userData', JSON.stringify(response.data.data.userData));
+            this.setUser(response.data.data.userData);
             return response;
         } catch (e) {
             console.error("Error", e.message);

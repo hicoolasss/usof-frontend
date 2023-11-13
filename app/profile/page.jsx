@@ -85,6 +85,7 @@ const Component = observer(() => {
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
+        console.log('storedUserData', storedUserData);
 
         if (storedUserData) {
             // Инициализируем состояние данными пользователя из localStorage
