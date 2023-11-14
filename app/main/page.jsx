@@ -13,6 +13,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
 
 
 const JetBrains = JetBrains_Mono({ subsets: ['latin'] })
@@ -20,13 +21,17 @@ const JetBrains = JetBrains_Mono({ subsets: ['latin'] })
 export default function Component() {
   const [theme, setTheme] = useState("system");
 
+  const theme_temp = useTheme()
+
   useEffect(() => {
     const currentTheme = localStorage.getItem("theme");
     if (currentTheme) {
       setTheme(currentTheme);
     }
-  }, [])
+  }, [theme_temp])
 
+ 
+  console.log(theme_temp)
   return (
     <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
 
@@ -45,7 +50,7 @@ export default function Component() {
             </HoverCardTrigger>
             <HoverCardContent className="w-80 bg-warning">
               <div key="someUniqueKey" className="flex justify-between space-x-4">
-               
+
                 <div className="space-y-1">
                   <h4 className="text-sm font-semibold">Alert!</h4>
                   <p className="text-sm">
