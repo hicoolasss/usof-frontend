@@ -30,8 +30,6 @@ export default function Component() {
     }
   }, [theme_temp])
 
- 
-  console.log(theme_temp)
   return (
     <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
 
@@ -119,7 +117,7 @@ export default function Component() {
       <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
 
         <div className="space-y-5 w-full flex flex-col items-center">
-          <h1 className="text-center text-3xl  font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 animate-text">
+          <h1 className="text-center text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-gray-500 animate-text">
             Discover Our Interactive Q&A Platform
           </h1>
           <p className="max-w-[875px] text-sm  text-zinc-500 sm:text-l md:text-xl xl:text-2xl text-center">
