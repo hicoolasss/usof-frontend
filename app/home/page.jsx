@@ -18,6 +18,9 @@ import { useStore } from '@/store/storeContext';
 import { observer } from "mobx-react"
 import { useLogout } from "../page";
 
+import { Tabs } from "@geist-ui/core";
+
+
 export default function Component() {
     const store = useStore();
 
@@ -119,8 +122,9 @@ export default function Component() {
                                 placeholder="Search"
                             >
                             </Input>
-
                         </div>
+                       
+
                     </nav>
                 </div>
 

@@ -26,6 +26,8 @@ module.exports = {
         google: "var(--google)",
         googleHover: "var(--google-hover)",
         hover: "var(--hover)",
+        gray: "var(--gray)",
+        highlight: "var(--highlight)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
         primary: {
