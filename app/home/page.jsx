@@ -32,14 +32,14 @@ export default function Component() {
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
-        console.log(storedUserData);
+        console.log("home user data:", storedUserData);
 
         if (storedUserData) {
             // Инициализируем состояние данными пользователя из localStorage
             setUser(JSON.parse(storedUserData));
             setIsLoading(false);
         }
-    }, []);
+    }, [store]);
 
     return (
         <div className="flex flex-col min-h-screen bg-background ">

@@ -106,7 +106,8 @@ class Store {
 
     async logout() {
         try {
-            if (!this.isAuth) throw new Error("User is not authorized");
+            const user = JSON.parse(localStorage.getItem('userData'));
+            if (!user) throw new Error("User is not authorized");
             console.log("logout")
             await AuthService.logout();
             localStorage.removeItem('token');

@@ -6,20 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Spinner from "@/components/ui/spinner";
 
-import { GitHub } from "iconoir-react";
-import { Google } from "iconoir-react";
-
 import { cn } from "@/lib/utils";
 
 import { useRouter } from "next/navigation";
 import Store from "@/store/store";
 import { toast } from 'sonner'
+import { EyeOff, Eye } from "lucide-react";
 
 
 export default function UserLoginForm({ className, ...props }) {
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [isRevealPwd, setIsRevealPwd] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
@@ -106,34 +105,24 @@ export default function UserLoginForm({ className, ...props }) {
                                 id="password"
                                 name="password"
                                 placeholder="Password"
-                                type="text"
+                                type={isRevealPwd ? "text" : "password"}
                                 autoCapitalize="none"
                                 autoCorrect="off"
                                 disabled={isLoading}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost">
-                                <svg
-                                    className=" h-4 w-4"
-                                    fill="none"
-                                    height="24"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
-                                    width="24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                                    <circle cx="12" cy="12" r="3" />
-                                </svg>
+                            <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost" >
+                                {isRevealPwd ? (
+                                    <EyeOff className="h-5 w-5" />
+                                ) : (
+                                    <Eye className="h-5 w-5" />
+                                )}
                                 <span className="sr-only">Toggle password visibility</span>
                             </Button>
                         </div>
                     </div>
 
-                    <Button className="mt-1" disabled={isLoading} onClick={handleLogin}>
+                    <Button className="mt-1" disabled={isLoading || !login || !password} onClick={handleLogin}>
                         {isLoading && (
                             <Spinner className="animate-spin mr-2 w-5 h-5" />
                         )}

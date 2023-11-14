@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 
 import Spinner from "@/components/ui/spinner";
 
-
+import { EyeOff, Eye } from "lucide-react";
 
 
 
@@ -23,6 +23,7 @@ export function UserAuthForm({ className, ...props }) {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isRevealPwd, setIsRevealPwd] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -72,6 +73,7 @@ export function UserAuthForm({ className, ...props }) {
     console.log("onSubmit");
     // Используйте значения состояния вместо FormData
     if (!validate()) {
+      setIsLoading(false);
       return;
     }
     try {
@@ -155,34 +157,28 @@ export function UserAuthForm({ className, ...props }) {
                 id="password"
                 name="password"
                 placeholder="Password"
-                type="text"
+                type={isRevealPwd ? "text" : "password"}
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost">
-                <svg
-                  className=" h-4 w-4"
-                  fill="none"
-                  height="24"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+              <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost" 
+            
+              onClick={() => setIsRevealPwd(prevState => !prevState)}
+              
+              >
+                {isRevealPwd ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
                 <span className="sr-only">Toggle password visibility</span>
               </Button>
             </div>
           </div>
 
-          <Button onClick={handleRegistration} className="mt-1" disabled={isLoading}>
+          <Button onClick={handleRegistration} className="mt-1" disabled={isLoading || !email || !login || !password}>
             {isLoading && (
               <Spinner className="animate-spin mr-2 w-5 h-5" />
             )}
