@@ -115,7 +115,7 @@ export default function Component() {
         <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
 
           <div className="absolute w-5/6 h-1 rounded-0 border-dashed border-b-2 border-gray-400 top-0 transform -translate-y-1/2"></div>
-          <div className="absolute w-5/6 h-1 rounded-0 border-dashed border-b-2 border-gray-400 -bottom-10 transform -translate-y-1/2"></div>
+          <div className="absolute w-5/6 h-1 rounded-0 border-dashed border-b-2 border-gray-400 bottom-4 md:-bottom-10 lg:-bottom-10 transform -translate-y-1/2"></div>
 
 
           <div className="space-y-5 w-full flex flex-col items-center">
@@ -128,14 +128,14 @@ export default function Component() {
           </div>
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 w-3/4">
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-              <Learning className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out" />
+              <Learning className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out " />
               <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">User-friendly Interface</h2>
               <p className="text-accent-foreground dark:text-zinc-100">
                 Navigating our platform is a breeze with our intuitive design.
               </p>
             </div>
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-              <Search className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out" />
+              <Search className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
               <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Powerful Search</h2>
               <p className="text-accent-foreground dark:text-zinc-100">
                 Implement a robust search engine that enables users to easily find relevant questions and answers.
@@ -143,7 +143,7 @@ export default function Component() {
             </div>
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
 
-              <PeaceHand className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out" />
+              <PeaceHand className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
 
               <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Voting and Rating System</h2>
               <p className="text-accent-foreground dark:text-zinc-100">
@@ -151,7 +151,7 @@ export default function Component() {
               </p>
             </div>
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-              <BadgeCheck className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out" />
+              <BadgeCheck className="text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
               <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Tagging and Categorization</h2>
               <p className="text-accent-foreground dark:text-zinc-100">
                 Enable users to categorize questions with relevant tags or topics.
@@ -159,7 +159,7 @@ export default function Component() {
             </div>
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
               <svg
-                className=" text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out"
+                className=" text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -180,7 +180,7 @@ export default function Component() {
             </div>
             <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
               <svg
-                className=" text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 transition ease-in-out"
+                className=" text-color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out"
                 fill="none"
                 height="24"
                 stroke="currentColor"
