@@ -51,6 +51,7 @@ export default function Home() {
         await store.checkAuth();
         setIsLoading(false); // Снимаем индикатор загрузки
         console.log(store.isAuth);
+        setIsAuth(store.isAuth);
         setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
 
 
@@ -59,7 +60,6 @@ export default function Home() {
         setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
       } finally {
         setIsLoading(false);
-        setIsAuth(store.isAuth);
       }
     }
     // Вызываем асинхронную функцию
