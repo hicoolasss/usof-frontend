@@ -61,7 +61,7 @@ class Store {
                 return; // Пользователь уже аутентифицирован
             }
     
-            const response = await $api.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, { withCredentials: true });
+            const response = await $api.get("api/auth/refresh");
             console.log("response:", response);
     
             localStorage.setItem('token', response.data.data.accessToken);
