@@ -66,12 +66,7 @@ const Component = observer(() => {
         }
     };
 
-    const handleAvatarChange = (event) => {
-        if (event.target.files) {
-            setAvatarFile(event.target.files[0]);
-        }
-        console.log('avatarFile', avatarFile);
-    };
+   
 
     const handleAvatarSave = async () => {
         setIsLoading(true);
