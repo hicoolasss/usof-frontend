@@ -2,7 +2,9 @@ import $api from "@/http";
 
 export default class AuthService {
 
-
+    static refresh() {
+        return $api.get('api/auth/refresh');
+    }
 
     static registration(login, email, password) {
         return $api.post('api/auth/register', { login, email, password });

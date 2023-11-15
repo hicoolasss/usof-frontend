@@ -50,6 +50,8 @@ class Store {
         try {
             if (this.isAuth || this.isCheckingAuth) return;
             this.isCheckingAuth = true;
+
+            console.log("checkAuth")
     
             // Попытка восстановить данные пользователя из localStorage
             const storedUser = localStorage.getItem('userData');
@@ -61,7 +63,7 @@ class Store {
                 return; // Пользователь уже аутентифицирован
             }
     
-            const response = await $api.get("api/auth/refresh");
+            const response = await AuthService.refresh();
             console.log("response:", response);
     
             localStorage.setItem('token', response.data.data.accessToken);
@@ -72,8 +74,8 @@ class Store {
         } catch (e) {
             console.error("Error", e.message);
             // В случае ошибки, можно также очистить localStorage
-            localStorage.removeItem('token');
-            localStorage.removeItem('userData');
+            // localStorage.removeItem('token');
+            // localStorage.removeItem('userData');
         } finally {
             this.isCheckingAuth = false;
         }
@@ -85,7 +87,7 @@ class Store {
             const response = await AuthService.login(login, password);
             localStorage.setItem('token', response.data.data.tokens.accessToken);
             this.setUser(response.data.data.user);
-            console.log(this.user);
+            console.log("login", this.user);
         } catch (error) {
 
             if (error.response) {
