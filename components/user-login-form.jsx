@@ -111,7 +111,11 @@ export default function UserLoginForm({ className, ...props }) {
                                 disabled={isLoading}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost" >
+                            <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost"
+
+                                onClick={() => setIsRevealPwd(prevState => !prevState)}
+
+                            >
                                 {isRevealPwd ? (
                                     <EyeOff className="h-5 w-5" />
                                 ) : (
