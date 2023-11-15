@@ -31,11 +31,13 @@ export default function Component() {
   }, [theme_temp])
 
   return (
-    <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
+    <section className="w-screen h-screen bg-background  md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
 
-      <div className="absolute flex top-5 right-5 space-x-5">
+      {/* <div className="absolute flex top-5 right-5 space-x-5">
+        <div >
+          <ModeToggle />
+        </div>
 
-        <ModeToggle />
         {theme === "light" ? (
           <HoverCard>
             <HoverCardTrigger asChild>
@@ -63,9 +65,7 @@ export default function Component() {
             </HoverCardContent>
           </HoverCard>
         ) : (null)}
-
-
-      </div>
+      </div> */}
       <Button variant="link" className="absolute text-xl font-bold text-color top-5 left-5 " >
         <svg
           xmlns="http://www.w3.org/2000/svg"

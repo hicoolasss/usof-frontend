@@ -57,6 +57,7 @@ import { HomeSimple, ShareIos, Telegram, Instagram } from "iconoir-react";
 import { Skeleton } from "@/components/ui/skeleton"
 
 
+
 export default function Component() {
 
     const store = useStore();
@@ -67,12 +68,6 @@ export default function Component() {
 
     const [user, setUser] = useState(store.user);
 
-    const [isclicked, setIsclicked] = useState(false);
-
-    const toggleIcon = () => {
-        setIsclicked((prevState) => !prevState);
-        console.log(isclicked)
-    };
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
@@ -89,7 +84,7 @@ export default function Component() {
         <div className="flex flex-col min-h-screen bg-background ">
             <header className="w-full h-16 px-4 lg:px-6 flex items-center justify-between  border-b border-zinc-200 dark:border-zinc-800">
                 <div className="relative flex items-center ">
-                    <nav className="hidden lg:flex  lg:w-full space-x-0">
+                    <nav className="hidden lg:flex lg:w-full space-x-0  lg:space-x-8">
                         <Button variant="link" className="text-xl font-bold text-color " href="#">
                             <svg className="mr-1"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +162,7 @@ export default function Component() {
                             </Link>
                         ) : null}
 
-                        <div className="relative justify-self-start hidden lg:flex md:flex items-center w-64 ml-8 md:ml-0 lg:ml-8">
+                        <div className="relative justify-self-start hidden lg:flex md:flex items-center w-64 ml-8 md:ml-0 lg:ml-8 xl:ml-8">
                             <Button variant="ghost" size="icon" className="absolute"><Search className="w-5 h-5" /></Button>
 
                             <Input className="indent-8"
@@ -179,8 +174,8 @@ export default function Component() {
                     <nav className="lg:hidden flex">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild >
-                                <Button variant="ghost" size="icon" onClick={toggleIcon}>
-                                    {isclicked ? <X /> : <MenuIcon />}
+                                <Button variant="ghost" size="icon" >
+                                    <MenuIcon />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" >
@@ -188,21 +183,27 @@ export default function Component() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem>
-                                        <User className="mr-2 h-4 w-4" />
-                                        <span>Profile</span>
-                                        {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                                        <Link href="/profile" className="flex flexs-row items-center">
+                                            <User className="mr-2 h-4 w-4" />
+                                            Profile
+                                        </Link>
+
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <HomeSimple className="mr-2 h-4 w-4" />
-                                        <span>Home</span>
+                                        <Link href="/" className="flex flexs-row items-center">
+                                            <HomeSimple className="mr-2 h-4 w-4" />
+                                            Home
+                                        </Link>
 
                                     </DropdownMenuItem>
 
                                 </DropdownMenuGroup>
 
                                 <DropdownMenuItem>
-                                    <Users className="mr-2 h-4 w-4" />
-                                    <span>Users</span>
+                                    <Link href="/users" className="flex flexs-row items-center">
+                                        <Users className="mr-2 h-4 w-4" />
+                                        <span>Users</span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSub>
                                     <DropdownMenuSubTrigger>
@@ -212,26 +213,28 @@ export default function Component() {
                                     <DropdownMenuPortal>
                                         <DropdownMenuSubContent>
                                             <DropdownMenuItem>
-                                                <Telegram className="mr-2 h-4 w-4" />
-                                                <span>Telegram</span>
+                                                <Link href="https://web.telegram.org/#/im?p=@hicoolasss" target="_blank" className="flex flexs-row items-center">
+                                                    <Telegram className="mr-2 h-4 w-4" />
+                                                    <span>Telegram</span>
+                                                </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
-                                                <Instagram className="mr-2 h-4 w-4" />
-                                                <span>Instagram</span>
+                                                <Link href="https://www.instagram.com/hicoolasss/" target="_blank" className="flex flexs-row items-center">
+                                                    <Instagram className="mr-2 h-4 w-4" />
+                                                    <span>Instagram</span>
+                                                </Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
-                                                <Facebook className="mr-2 h-4 w-4" />
-                                                <span>Facebook</span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <Github className="mr-2 h-4 w-4" />
-                                                <span>Github</span>
+                                                <Link href="https://github.com/hicoolasss" target="_blank" className="flex flexs-row items-center">
+                                                    <Github className="mr-2 h-4 w-4" />
+                                                    <span>Github</span>
+                                                </Link>
                                             </DropdownMenuItem>
                                         </DropdownMenuSubContent>
                                     </DropdownMenuPortal>
                                 </DropdownMenuSub>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onClick={logout}>
                                     <LogOut className="mr-2 h-4 w-4" />
                                     <span>Log out</span>
                                 </DropdownMenuItem>
@@ -241,10 +244,10 @@ export default function Component() {
                 </div>
 
 
-                <div className="flex items-center space-x-4 md:space-x-2 lg:space-x-4">
+                <div className="flex items-center space-x-4  lg:space-x-4">
                     <div ><ModeToggle /></div>
                     {user ? (
-                        <Button className="hidden lg:inline-flex md:inline-flex" variant="outline" onClick={logout}>
+                        <Button className="hidden lg:inline-flex " variant="outline" onClick={logout}>
                             Sign Out
                         </Button>) : (
                         <Button variant="ghost"
