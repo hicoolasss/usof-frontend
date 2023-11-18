@@ -6,7 +6,7 @@ module.exports = {
     './components/**/*.{js,jsx}',
     './app/**/*.{js,jsx}',
     './src/**/*.{js,jsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -30,6 +30,8 @@ module.exports = {
         highlight: "var(--highlight)",
         success: "var(--success)",
         violet: "var(--violet)",
+        accent1: "var(--accent-1)",
+        cyan: "var(--cyan)",
         warning: "var(--warning)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
@@ -85,21 +87,65 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       'animation': {
-        'text':'text 5s ease infinite',
-    },
-    'keyframes': {
+        'text': 'text 5s ease infinite',
+      },
+      'keyframes': {
         'text': {
-            '0%, 100%': {
-               'background-size':'200% 200%',
-                'background-position': 'right center'
-            },
-            '50%': {
-               'background-size':'200% 200%',
-                'background-position': 'left center'
-            }
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          }
         },
-    }
+      },
+      typography: (theme) => ({
+        dark: {
+          css: {
+            color: theme('colors.white'),
+            a: {
+              color: theme('colors.primary'),
+              '&:hover': {
+                color: theme('colors.primary-foreground'),
+              },
+            },
+            'h1, h2, h3, h4, th': {
+              color: theme('colors.color'),
+            },
+            strong: {
+              color: theme('colors.color'),
+            },
+            em: {
+              color: theme('colors.muted'),
+            },
+            code: {
+              color: theme('colors.gray'),
+            },
+            pre: {
+              color: theme('colors.background'),
+            },
+            ol: {
+              color: theme('colors.color'),
+            },
+            ul: {
+              color: theme('colors.color'),
+            },
+            'li:before': {
+              backgroundColor: theme('colors.cyan'),
+            },
+            hr: {
+              borderColor: theme('colors.border'),
+            },
+            // ... add other elements as needed
+          },
+        },
+      }),
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('@tailwindcss/typography'),
+  ],
 }

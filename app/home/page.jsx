@@ -152,7 +152,7 @@ export default function Component() {
                         </Link>
 
                         {user ? (
-                            <Link href="/posts">
+                            <Link href="/createPost">
                                 <Button
                                     variant="ghost"
                                     className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
