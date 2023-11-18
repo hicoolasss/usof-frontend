@@ -29,6 +29,7 @@ module.exports = {
         gray: "var(--gray)",
         highlight: "var(--highlight)",
         success: "var(--success)",
+        violet: "var(--violet)",
         warning: "var(--warning)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",

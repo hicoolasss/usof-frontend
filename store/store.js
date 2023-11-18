@@ -126,7 +126,8 @@ class Store {
         try {
             console.log("updateUser")
             const response = await userService.updateUser(user, id);
-            // console.log("response:", response);
+            localStorage.removeItem('userData');
+            localStorage.setItem('userData', JSON.stringify(response.data.data.user));
             this.setUser(response.data.data.user);
             // console.log(this.user);
             return this.user; // Возвращает обновленные данные пользователя
