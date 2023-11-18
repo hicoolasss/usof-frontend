@@ -38,6 +38,8 @@ const Component = observer(() => {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [user, setUser] = useState(store.user);
+
     const [firstName, setFirstName] = useState('');
 
     const [lastName, setLastName] = useState('');
@@ -45,8 +47,8 @@ const Component = observer(() => {
     const [email, setEmail] = useState('');
 
     const [password, setPassword] = useState('');
+    
 
-    const [user, setUser] = useState(store.user);
 
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState('');
@@ -97,8 +99,11 @@ const Component = observer(() => {
         console.log('storedUserData', storedUserData);
 
         if (storedUserData) {
-            // Инициализируем состояние данными пользователя из localStorage
-            setUser(JSON.parse(storedUserData));
+            const userData = JSON.parse(storedUserData);
+            setUser(userData);
+            setFirstName(userData && userData.full_name ? userData.full_name.split(' ')[0] : '');
+            setLastName(userData && userData.full_name ? userData.full_name.split(' ')[1] : '');
+            setEmail(userData && userData.email);
             setIsLoading(false);
         } else {
             toast.error('Please log in to check your profile!');
@@ -323,27 +328,9 @@ const Component = observer(() => {
                                 placeholder={user && user.email ? user.email : 'Enter your email'}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                            // id="email" placeholder="Enter your email" required type="email" 
                             />
                         </div>
-                        {/* <div className="space-y-2">
-                            <Label className="dark:text-gray-200" htmlFor="password">
-                                Password
-                            </Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoCapitalize="none"
-                                autoCorrect="off"
-                                disabled={isLoading}
-                                placeholder="Enter your password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            // id="password" placeholder="Enter your password" required type="password"
-                            />
-                        </div> */}
-                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName  || isLoading}>Save Changes</Button>
+                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || isLoading}>Save Changes</Button>
                     </CardContent>
                 </Card>
                 <Card className="space-y-4 bg-background">
