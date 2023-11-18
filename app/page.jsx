@@ -2,7 +2,7 @@
 import { ModeToggle } from '@/components/theme-swithcer';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { LogOut } from 'lucide-react';
 
 import Store from '@/store/store';
@@ -16,20 +16,21 @@ import { toast } from 'sonner'
 import Spinner from '@/components/ui/spinner';
 
 
+
 export const useLogout = () => {
   const router = useRouter();
 
   const handleLogout = async () => {
-      try {
-          await Store.logout();
-          router.push('/');
-          toast.success('Logout successful!', { duration: 2000 });
-      } catch (error) {
-          if (error.message) {
-              toast.error(error.message, { duration: 2000 });
-          }
-          console.error("Error", error.message);
+    try {
+      await Store.logout();
+      router.push('/');
+      toast.success('Logout successful!', { duration: 2000 });
+    } catch (error) {
+      if (error.message) {
+        toast.error(error.message, { duration: 2000 });
       }
+      console.error("Error", error.message);
+    }
   };
 
   return handleLogout;
@@ -46,15 +47,13 @@ export default function Home() {
 
   useEffect(() => {
 
-    async function checkAuthStatus() {
+    function checkAuthStatus() {
       try {
-        await store.checkAuth();
-        setIsLoading(false); // Снимаем индикатор загрузки
-        console.log(store.isAuth);
+        store.checkAuth();
         setIsAuth(store.isAuth);
         setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
-
-
+        setIsLoading(false); // Снимаем индикатор загрузки
+        console.log('user', store.user);
       } catch (error) {
         console.error("Ошибка при проверке аутентификации:", error);
         setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
@@ -63,10 +62,9 @@ export default function Home() {
       }
     }
     // Вызываем асинхронную функцию
-    checkAuthStatus().catch(console.error);
+    checkAuthStatus();
 
   }, [store]);
-
 
   return (
 
@@ -106,16 +104,11 @@ export default function Home() {
         <LogOut className="h-4 w-4" />
       </Button>
 
-
       <div className='mt-5'>
 
         {isLoading ? <Spinner className="animate-spin mr-2 w-5 h-5" /> : (isAuth || !isAuth) ? <h1>Hi, {user?.login}!</h1> : <h1>Hi, Guest</h1>}
 
       </div>
-
-
-
-
     </main>
 
   );

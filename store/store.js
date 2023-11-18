@@ -74,8 +74,8 @@ class Store {
         } catch (e) {
             console.error("Error", e.message);
             // В случае ошибки, можно также очистить localStorage
-            // localStorage.removeItem('token');
-            // localStorage.removeItem('userData');
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
         } finally {
             this.isCheckingAuth = false;
         }
@@ -149,10 +149,23 @@ class Store {
         }
     }
 
-    async verifyEmail(email) {
+    async verifyEmail(email, userId) {
         try {
-            const response = await AuthService.verifyEmail(email);
-            return response.data.message;
+            await AuthService.verifyEmail(email);
+            const response = await userService.getUserById(userId);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getUpdatedEmailVerificationStatus(token) {
+        try {
+            const response = await AuthService.getUpdatedEmailVerificationStatus(token);
+            localStorage.removeItem('userData');
+            localStorage.setItem('userData', JSON.stringify(response.data.data.user));
+
+            return response;
         } catch (e) {
             console.error("Error", e.message);
         }
@@ -166,6 +179,7 @@ class Store {
             console.error("Error", e.message);
         }
     }
+
 
 }
 const store = new Store();

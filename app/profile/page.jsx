@@ -28,7 +28,6 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { LoadingAvatar } from "./loading"
 
 const Component = observer(() => {
 
@@ -66,7 +65,7 @@ const Component = observer(() => {
         }
     };
 
-   
+
 
     const handleAvatarSave = async () => {
         setIsLoading(true);
@@ -104,6 +103,7 @@ const Component = observer(() => {
             setUser(JSON.parse(storedUserData));
             setIsLoading(false);
         } else {
+            toast.error('Please log in to check your profile!');
             router.push('/login');
         }
     }, [router]);
@@ -148,7 +148,7 @@ const Component = observer(() => {
 
         try {
             // Отправляем обновленные данные на сервер
-            const response = await store.verifyEmail(user.email);
+            const response = await store.verifyEmail(user.email, user.id);
             router.push('/verify');
             console.log(response);
 
@@ -167,169 +167,169 @@ const Component = observer(() => {
 
 
     return (
-
-        <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start" >
-            <div className="absolute left-5 top-5 flex flex-row">
-                <Button variant="link" className="text-xl text-color left-5 top-5 p-0" href="#">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        fill="none"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        color="var(--color)"
-                    >
-                        <rect
-                            width={7}
-                            height={5}
-                            x={3}
-                            y={2}
-                            stroke="var(--color)"
+            <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start" >
+                <div className="absolute left-5 top-5 flex flex-row">
+                    <Button variant="link" className="text-xl text-color left-5 top-5 p-0" href="#">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24px"
+                            height="24px"
+                            fill="none"
                             strokeWidth="2"
-                            rx="0.6"
-                        />
-                        <rect
-                            width={7}
-                            height={5}
-                            x="8.5"
-                            y={17}
-                            stroke="var(--color)"
-                            strokeWidth="2"
-                            rx="0.6"
-                        />
-                        <rect
-                            width={7}
-                            height={5}
-                            x={14}
-                            y={2}
-                            stroke="var(--color)"
-                            strokeWidth="2"
-                            rx="0.6"
-                        />
-                        <path
-                            stroke="var(--color)"
-                            strokeWidth="2"
-                            d="M6.5 7v3.5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7M12 12.5V17"
-                        />
-                    </svg>
-
-                    <Link href="/">Smack Overslow</Link>
-                    <Slash />
-                </Button>
-                <Button variant="link" className="text-xl text-color p-0">
-                    <Link href="/profile">Profile</Link>
-                </Button>
-
-            </div>
-            <div className="mx-auto flex flex-col space-y-5 p-5 lg:flex-row lg:space-x-5 lg:space-y-0 mt-16">
-                <Card className="space-y-4 bg-backgorund">
-                    <CardHeader>
-                        <CardTitle className="text-color">Avatar</CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-
-                        <div className="space-y-2">
-
-                            <div className="flex flex-col items-center gap-3">
-                                {avatarPreview ? (
-                                    <Avatar className="rounded-full w-24 h-24">
-                                        <AvatarImage src={avatarPreview} alt="Avatar Preview" style={{ objectFit: "cover" }} quality={100} />
-                                        <AvatarFallback>
-                                            <Skeleton />
-                                        </AvatarFallback>
-
-                                    </Avatar>
-                                ) : (
-                                    <Avatar className="rounded-full w-24 h-24">
-                                        <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`} style={{ objectFit: "cover" }} quality={100} />
-                                        <AvatarFallback>
-                                            <Skeleton />
-                                        </AvatarFallback>
-
-                                    </Avatar>
-                                )
-
-                                }
-
-                                <div className="grid w-full max-w-sm items-center gap-1.5">
-                                    <Label htmlFor="picture">Pick Avatar</Label>
-                                    <Input id="picture" type="file" onChange={handleAvatarChangePreview} />
-                                </div>
-                                <Button className="w-full" onClick={handleAvatarSave} disabled={!avatarFile || isLoading}>
-                                    Save Avatar
-                                    {isLoading && (
-                                        <Spinner className="animate-spin mr-2 w-5 h-5" />
-                                    )}
-                                </Button>
-                            </div>
-                        </div>
-
-                    </CardContent>
-                </Card>
-
-                <Card className="space-y-4 bg-background">
-                    <CardHeader>
-                        <CardTitle className="dark:text-white">Login Information</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label className="dark:text-gray-200" htmlFor="first-name">
-                                    First name
-                                </Label>
-                                <Input
-                                    id="first-name"
-                                    name="first-name"
-                                    type="text"
-                                    autoCapitalize="none"
-                                    autoCorrect="off"
-                                    disabled={isLoading}
-                                    placeholder="Enter your first name"
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                    required
-
-
-                                />
-
-                            </div>
-                            <div className="space-y-2">
-                                <Label className="dark:text-gray-200" htmlFor="last-name">
-                                    Last name
-                                </Label>
-                                <Input
-                                    id="last-name"
-                                    name="last-name"
-                                    type="text"
-                                    autoCapitalize="none"
-                                    autoCorrect="off"
-                                    disabled={isLoading}
-                                    placeholder="Enter your last name"
-                                    onChange={(e) => setLastName(e.target.value)}
-                                    required
-                                // id="last-name" placeholder="Enter your last name" required 
-                                />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="dark:text-gray-200" htmlFor="email">
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoCapitalize="none"
-                                autoCorrect="off"
-                                disabled={isLoading}
-                                placeholder="Enter your email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            // id="email" placeholder="Enter your email" required type="email" 
+                            viewBox="0 0 24 24"
+                            color="var(--color)"
+                        >
+                            <rect
+                                width={7}
+                                height={5}
+                                x={3}
+                                y={2}
+                                stroke="var(--color)"
+                                strokeWidth="2"
+                                rx="0.6"
                             />
-                        </div>
-                        {/* <div className="space-y-2">
+                            <rect
+                                width={7}
+                                height={5}
+                                x="8.5"
+                                y={17}
+                                stroke="var(--color)"
+                                strokeWidth="2"
+                                rx="0.6"
+                            />
+                            <rect
+                                width={7}
+                                height={5}
+                                x={14}
+                                y={2}
+                                stroke="var(--color)"
+                                strokeWidth="2"
+                                rx="0.6"
+                            />
+                            <path
+                                stroke="var(--color)"
+                                strokeWidth="2"
+                                d="M6.5 7v3.5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7M12 12.5V17"
+                            />
+                        </svg>
+
+                        <Link href="/">Smack Overslow</Link>
+                        <Slash />
+                    </Button>
+                    <Button variant="link" className="text-xl text-color p-0">
+                        <Link href="/profile">Profile</Link>
+                    </Button>
+
+                </div>
+                <div className="mx-auto flex flex-col space-y-5 p-5 lg:flex-row lg:space-x-5 lg:space-y-0 mt-16">
+                    <Card className="space-y-4 bg-backgorund">
+                        <CardHeader>
+                            <CardTitle className="text-color">Avatar</CardTitle>
+                        </CardHeader>
+
+                        <CardContent className="space-y-4">
+
+                            <div className="space-y-2">
+
+                                <div className="flex flex-col items-center gap-3">
+
+                                    {avatarPreview ? (
+                                        <Avatar className="rounded-full w-24 h-24">
+                                            <AvatarImage src={avatarPreview} alt="Avatar Preview" style={{ objectFit: "cover" }} quality={100} />
+                                            <AvatarFallback>
+                                                <Skeleton />
+                                            </AvatarFallback>
+
+                                        </Avatar>
+                                    ) : (
+                                        <Avatar className="rounded-full w-24 h-24">
+                                            <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`} style={{ objectFit: "cover" }} quality={100} />
+                                            <AvatarFallback>
+                                                <Skeleton />
+                                            </AvatarFallback>
+
+                                        </Avatar>
+                                    )
+
+                                    }
+
+                                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="picture">Pick Avatar</Label>
+                                        <Input id="picture" type="file" onChange={handleAvatarChangePreview} />
+                                    </div>
+                                    <Button className="w-full" onClick={handleAvatarSave} disabled={!avatarFile || isLoading}>
+                                        Save Avatar
+                                        {isLoading && (
+                                            <Spinner className="animate-spin mr-2 w-5 h-5" />
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
+
+                        </CardContent>
+                    </Card>
+
+                    <Card className="space-y-4 bg-background">
+                        <CardHeader>
+                            <CardTitle className="dark:text-white">Login Information</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label className="dark:text-gray-200" htmlFor="first-name">
+                                        First name
+                                    </Label>
+                                    <Input
+                                        id="first-name"
+                                        name="first-name"
+                                        type="text"
+                                        autoCapitalize="none"
+                                        autoCorrect="off"
+                                        disabled={isLoading}
+                                        placeholder="Enter your first name"
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        required
+
+
+                                    />
+
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="dark:text-gray-200" htmlFor="last-name">
+                                        Last name
+                                    </Label>
+                                    <Input
+                                        id="last-name"
+                                        name="last-name"
+                                        type="text"
+                                        autoCapitalize="none"
+                                        autoCorrect="off"
+                                        disabled={isLoading}
+                                        placeholder="Enter your last name"
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required
+                                    // id="last-name" placeholder="Enter your last name" required 
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label className="dark:text-gray-200" htmlFor="email">
+                                    Email
+                                </Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
+                                    disabled={isLoading}
+                                    placeholder="Enter your email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                // id="email" placeholder="Enter your email" required type="email" 
+                                />
+                            </div>
+                            {/* <div className="space-y-2">
                             <Label className="dark:text-gray-200" htmlFor="password">
                                 Password
                             </Label>
@@ -346,33 +346,35 @@ const Component = observer(() => {
                             // id="password" placeholder="Enter your password" required type="password"
                             />
                         </div> */}
-                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || !email || isLoading}>Save Changes</Button>
-                    </CardContent>
-                </Card>
-                <Card className="space-y-4 bg-background">
-                    <CardHeader>
-                        <CardTitle className="text-color">Personal Information</CardTitle>
-                    </CardHeader>
+                            <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || !email || isLoading}>Save Changes</Button>
+                        </CardContent>
+                    </Card>
+                    <Card className="space-y-4 bg-background">
+                        <CardHeader>
+                            <CardTitle className="text-color">Personal Information</CardTitle>
+                        </CardHeader>
 
-                    <CardContent className="space-y-4">
-                        <div className="space-x-2 flex flex-row items-center">
-                            <p className="dark:text-gray-200">Rating Score - </p>
-                            <p className="text-lg font-bold dark:text-gray-300">4.5</p>
-                        </div>
-                        <div className="space-x-2 flex flex-row items-center ">
-                            <p className="dark:text-gray-200">Role - </p>
-                            <p className="text-lg font-bold dark:text-gray-300">User</p>
-                        </div>
-                        <div className="space-x-2 flex flex-row items-center ">
-                            <p className="dark:text-gray-200">Email - </p>
-                            <Button onClick={handleVerifyEmail}>Verify</Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                        <CardContent className="space-y-4">
+                            <div className="space-x-2 flex flex-row items-center">
+                                <p className="dark:text-gray-200">Rating Score - </p>
+                                <p className="text-lg font-bold dark:text-gray-300">4.5</p>
+                            </div>
+                            <div className="space-x-2 flex flex-row items-center ">
+                                <p className="dark:text-gray-200">Role - </p>
+                                <p className="text-lg font-bold dark:text-gray-300">User</p>
+                            </div>
+                            <div className="space-x-2 flex flex-row items-center ">
+                                <p className="dark:text-gray-200">Email - </p>
+                                {user.is_email_verified ?
+                                    <p className="text-lg font-bold dark:text-gray-300">Verified</p>
+                                    :
+                                    <Button onClick={handleVerifyEmail}>Verify</Button>
+                                }
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-        </div>
-
-
     )
 });
 

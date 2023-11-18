@@ -13,7 +13,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { useEffect, useState } from "react"
-import { useTheme } from "next-themes"
+import { useTheme } from "next-themes";
 
 
 const JetBrains = JetBrains_Mono({ subsets: ['latin'] })
@@ -31,7 +31,7 @@ export default function Component() {
   }, [theme_temp])
 
   return (
-    <section className="w-screen h-screen bg-background  md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
+    <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
 
       {/* <div className="absolute flex top-5 right-5 space-x-5">
         <div >
@@ -111,12 +111,8 @@ export default function Component() {
         </svg>
         <Link href="/">Smack Overslow</Link>
       </Button>
-      <div className="relative">
+      
         <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
-
-          <div className="absolute w-5/6 h-1 rounded-0 border-dashed border-b-2 border-gray-400 top-0 transform -translate-y-1/2"></div>
-          <div className="absolute w-5/6 h-1 rounded-0 border-dashed border-b-2 border-gray-400 bottom-4 md:-bottom-10 lg:-bottom-10 transform -translate-y-1/2"></div>
-
 
           <div className="space-y-5 w-full flex flex-col items-center">
             <h1 className="text-center text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-gray-500 animate-text">
@@ -215,7 +211,7 @@ export default function Component() {
             </div>
           </div>
         </div>
-      </div>
+      
 
     </section>
   )

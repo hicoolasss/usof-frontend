@@ -22,4 +22,8 @@ export default class AuthService {
         return $api.post(`api/auth/verify`, { email });
     }
 
+    static async getUpdatedEmailVerificationStatus(token) {
+        return $api.post(`/api/auth/verify/${token}`);
+    }
+
 }

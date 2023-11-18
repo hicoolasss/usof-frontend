@@ -28,6 +28,7 @@ module.exports = {
         hover: "var(--hover)",
         gray: "var(--gray)",
         highlight: "var(--highlight)",
+        success: "var(--success)",
         warning: "var(--warning)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
