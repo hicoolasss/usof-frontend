@@ -6,7 +6,7 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
@@ -19,7 +19,12 @@ import { useRouter } from "next/navigation";
 
 import { useStore } from '@/store/storeContext';
 import { observer } from "mobx-react"
-
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
 import {
     Avatar,
     AvatarFallback,
@@ -27,8 +32,8 @@ import {
 } from "@/components/ui/avatar"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { set } from "mobx"
-
+import { UserAuthForm } from "@/components/user-auth-form"
+import { DataTable } from "@/components/user-table"
 
 const Component = observer(() => {
 
@@ -36,7 +41,12 @@ const Component = observer(() => {
 
     const router = useRouter();
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isPageLoading, setIsPageLoading] = useState(true); // State for initial page load
+    const [isAsyncLoading, setIsAsyncLoading] = useState(false); // State for async operations
+
+    const toggleLoading = (isPageLoading) => {
+        setIsPageLoading(isPageLoading);
+    };
 
     const [user, setUser] = useState(store.user);
 
@@ -47,52 +57,66 @@ const Component = observer(() => {
     const [email, setEmail] = useState('');
 
     const [password, setPassword] = useState('');
-    
-
 
     const [avatarFile, setAvatarFile] = useState(null);
-    const [avatarPreview, setAvatarPreview] = useState('');
+    const [avatarPreview, setAvatarPreview] = useState(null);
 
-
-    const handleAvatarChangePreview = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            setAvatarFile(file);
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setAvatarPreview(e.target.result);
-            };
-            reader.readAsDataURL(file);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [users, setUsers] = useState([]);
+    const makeApiCall = async (call, successMessage, errorMessage) => {
+        try {
+            const response = await call();
+            toast.success(successMessage, { duration: 2000 });
+            return response;
+        } catch (error) {
+            toast.error(errorMessage || error.message, { duration: 2000 });
+            console.error("Error", error.message);
+        } finally {
+            setIsAsyncLoading(false);
         }
     };
 
-    const handleAvatarSave = async () => {
-        setIsLoading(true);
 
-        if (!user || !user.id) {
-            console.error('User ID is undefined.');
-            return;
-        }
+    const readFile = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsDataURL(file);
+        });
+    };
 
-        try {
-            // Отправляем обновленные данные на сервер
-            const response = await store.uploadUserAvatar(user.id, avatarFile);
-            setUser({ ...user, profile_picture_path: response.data.data.userData.profile_picture_path });
-            console.log(response);
-
-        }
-        catch (error) {
-            if (error.message) {
-                toast.error(error.message, { duration: 2000 });
-                console.error("Error", error.message);
+    const handleAvatarChangePreview = async (event) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            try {
+                const filePreview = await readFile(file);
+                setAvatarFile(file);
+                setAvatarPreview(filePreview);
+            } catch (error) {
+                toast.error('Failed to read file.', { duration: 2000 });
             }
         }
-        finally {
-            setIsLoading(false);
-            toast.success('Avatar updated successfully!', { duration: 2000 });
-        }
-    }
+    };
+    const updateUserState = (userData) => {
+        setUser(userData);
+        const { full_name = '', email = '' } = userData;
+        const [firstName, lastName] = full_name.split(' ');
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+    };
+
+    const handleAvatarSave = async () => {
+        setIsAsyncLoading(true);
+        const response = await makeApiCall(
+            () => store.uploadUserAvatar(user.id, avatarFile),
+            'Avatar updated successfully!',
+            'Failed to update avatar.'
+        );
+        if (response) updateUserState(response.data.data.userData);
+    };
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
@@ -104,76 +128,40 @@ const Component = observer(() => {
             setFirstName(userData && userData.full_name ? userData.full_name.split(' ')[0] : '');
             setLastName(userData && userData.full_name ? userData.full_name.split(' ')[1] : '');
             setEmail(userData && userData.email);
-            setIsLoading(false);
+            setIsPageLoading(false);
         } else {
             toast.error('Please log in to check your profile!');
             router.push('/login');
         }
     }, [router]);
 
-
-
     const handleSaveChanges = async () => {
-        setIsLoading(true);
-
-        if (!user || !user.id) {
-            console.error('User ID is undefined.');
-            return;
-        }
-
-        try {
-            console.log('user', user);
-            const full_name = `${firstName} ${lastName}`;
-            // Отправляем обновленные данные на сервер
-            const response = await store.updateUser({ full_name, email, password }, user.id);
-            setUser(response);
-
-        }
-        catch (error) {
-            if (error.message) {
-                toast.error(error.message, { duration: 2000 });
-                console.error("Error", error.message);
-            }
-        }
-        finally {
-            setIsLoading(false);
-            toast.success('User updated successfully!', { duration: 2000 });
-        }
-    }
+        setIsAsyncLoading(true);
+        const full_name = `${firstName} ${lastName}`;
+        const response = await makeApiCall(
+            () => store.updateUser({ full_name, email, password }, user.id),
+            'User updated successfully!',
+            'Failed to update user.'
+        );
+        if (response) updateUserState(response);
+    };
 
     const handleVerifyEmail = async () => {
-        setIsLoading(true);
-
-        if (!user || !user.id) {
-            console.error('User ID is undefined.');
-            return;
-        }
-
-        try {
-            // Отправляем обновленные данные на сервер
-            const response = await store.verifyEmail(user.email, user.id);
-            router.push('/verify');
-            console.log(response);
-
-        }
-        catch (error) {
-            if (error.message) {
-                toast.error(error.message, { duration: 2000 });
-                console.error("Error", error.message);
-            }
-        }
-        finally {
-            setIsLoading(false);
-            toast.success('Verification link sent to your email!', { duration: 2000 });
-        }
-    }
+        setIsAsyncLoading(true);
+        await makeApiCall(
+            () => store.verifyEmail(user.email, user.id),
+            'Verification link sent to your email!',
+            'Failed to send verification link.'
+        );
+        if (response) router.push('/verify');
+    };
 
 
     return (
-        <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start" >
+        <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start overflow-auto" >
             <div className="absolute left-5 top-5 flex flex-row">
-                <Button variant="link" className="text-xl text-color left-5 top-5 p-0" href="#">
-                    <svg
+                <Button variant="link" className="text-xl font-bold text-color left-5 top-5 p-0" href="#">
+                    <svg className="mr-1"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24px"
                         height="24px"
@@ -219,12 +207,12 @@ const Component = observer(() => {
                     <Link href="/">Smack Overslow</Link>
                     <Slash />
                 </Button>
-                <Button variant="link" className="text-xl text-color p-0">
+                <Button variant="link" className="text-xl font-bold text-color p-0">
                     <Link href="/profile">Profile</Link>
                 </Button>
 
             </div>
-            <div className="mx-auto flex flex-col space-y-5 p-5 lg:flex-row lg:space-x-5 lg:space-y-0 mt-16">
+            <div className="mx-auto flex flex-col space-y-5 p-5 lg:grid lg:grid-cols-3 lg:grid-row-2 lg:gap-5 lg:space-y-0 px-10 mt-16">
                 <Card className="space-y-4 bg-backgorund">
                     <CardHeader>
                         <CardTitle className="text-color">Avatar</CardTitle>
@@ -260,9 +248,9 @@ const Component = observer(() => {
                                     <Label htmlFor="picture">Pick Avatar</Label>
                                     <Input id="picture" type="file" onChange={handleAvatarChangePreview} />
                                 </div>
-                                <Button className="w-full" onClick={handleAvatarSave} disabled={!avatarFile || isLoading}>
+                                <Button className="w-full" onClick={handleAvatarSave} disabled={!avatarFile || isAsyncLoading}>
                                     Save Avatar
-                                    {isLoading && (
+                                    {isAsyncLoading && (
                                         <Spinner className="animate-spin mr-2 w-5 h-5" />
                                     )}
                                 </Button>
@@ -287,12 +275,10 @@ const Component = observer(() => {
                                     type="text"
                                     autoCapitalize="none"
                                     autoCorrect="off"
-                                    disabled={isLoading}
+                                    disabled={isPageLoading || isAsyncLoading}
                                     placeholder={user && user.full_name ? user.full_name.split(' ')[0] : 'Enter your first name'}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
-
-
                                 />
 
                             </div>
@@ -306,7 +292,7 @@ const Component = observer(() => {
                                     type="text"
                                     autoCapitalize="none"
                                     autoCorrect="off"
-                                    disabled={isLoading}
+                                    disabled={isPageLoading || isAsyncLoading}
                                     placeholder={user && user.full_name ? user.full_name.split(' ')[1] : 'Enter your last name'}
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
@@ -324,13 +310,13 @@ const Component = observer(() => {
                                 type="email"
                                 autoCapitalize="none"
                                 autoCorrect="off"
-                                disabled={isLoading}
+                                disabled={isPageLoading || isAsyncLoading}
                                 placeholder={user && user.email ? user.email : 'Enter your email'}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
-                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || isLoading}>Save Changes</Button>
+                        <Button className="w-full" onClick={handleSaveChanges} disabled={!firstName || !lastName || isAsyncLoading || isPageLoading}>Save Changes</Button>
                     </CardContent>
                 </Card>
                 <Card className="space-y-4 bg-background">
@@ -346,21 +332,73 @@ const Component = observer(() => {
                         </div>
                         <div className="space-x-2 flex flex-row items-center ">
                             <p className="dark:text-gray-200">Role - </p>
-                            <p className="text-lg font-bold dark:text-gray-300">User</p>
+                            <p className="text-lg font-bold dark:text-gray-300">{user && user.role}</p>
                         </div>
                         <div className="space-x-2 flex flex-row items-center ">
                             <p className="dark:text-gray-200">Email - </p>
                             {user.is_email_verified ?
                                 <p className="text-lg font-bold dark:text-gray-300">Verified</p>
                                 :
-                                <Button onClick={handleVerifyEmail}>Verify</Button>
+                                <Button onClick={handleVerifyEmail} disabled={isPageLoading}>Verify</Button>
                             }
                         </div>
 
+                    </CardContent>
+                </Card>
+                <Card className="space-y-4 bg-background">
+                    <CardHeader>
+                        <CardTitle className="text-color">Create New User</CardTitle>
+                    </CardHeader>
 
+                    <CardContent className="px-10">
+
+                        <UserAuthForm forAdmin={true} isLoading={isPageLoading} setIsLoading={toggleLoading} />
 
                     </CardContent>
                 </Card>
+                <Card className="space-y-4 bg-background col-start-3 col-end-4">
+                    <CardHeader>
+                        <CardTitle className="text-color">Create New Category</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="grid gap-3 p-10">
+                        <div>
+                            <Label htmlFor="title">
+                                Title
+                            </Label>
+                            <Input
+                                id="title"
+                                name="title"
+                                placeholder="How to create placeholders?"
+                                type="text"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                disabled={isPageLoading || isAsyncLoading}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="description">
+                                Description
+                            </Label>
+                            <Input
+                                id="description"
+                                name="description"
+                                placeholder="I want to know how to ..."
+                                type="text"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                disabled={isPageLoading || isAsyncLoading}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
+                        <Button className="w-full" disabled={isPageLoading || isAsyncLoading || !title || !description}>Create category</Button>
+                    </CardContent>
+                </Card>
+            </div>
+            <h1 className="text-3xl font-bold mt-16">User Managment</h1>
+            <div className="w-full px-10 rounded-md border-solid border-2 border-ring border-opacity-75 my-12 lg:w-2/3">
+                <DataTable />
             </div>
         </div>
     )

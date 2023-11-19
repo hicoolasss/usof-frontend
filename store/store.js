@@ -3,9 +3,11 @@ import AuthService from "@/services/authService";
 import Cookies from 'js-cookie';
 import $api from "@/http";
 import userService from "@/services/userService";
+import categoryService from "@/services/categoryService";
 
 class Store {
     user = {};
+    categories = [];
     isAuth = false;
     isCheckingAuth = false;
 
@@ -21,7 +23,7 @@ class Store {
         makeAutoObservable(this);
     }
 
-    async registration(login, email, password) {
+    async registration(login, email, password, role, forAdmin) {
         try {
             console.log("register")
             const response = await AuthService.registration(login, email, password);
@@ -52,23 +54,23 @@ class Store {
             this.isCheckingAuth = true;
 
             console.log("checkAuth")
-    
+
             // Попытка восстановить данные пользователя из localStorage
             const storedUser = localStorage.getItem('userData');
-            
+
             if (storedUser) {
                 const userData = JSON.parse(storedUser);
                 this.setUser(userData);
                 this.setAuth(true);
                 return; // Пользователь уже аутентифицирован
             }
-    
+
             const response = await AuthService.refresh();
             console.log("response:", response);
-    
+
             localStorage.setItem('token', response.data.data.accessToken);
             localStorage.setItem('userData', JSON.stringify(response.data.data.user));
-    
+
             this.setAuth(true);
             this.setUser(response.data.data.user);
         } catch (e) {
@@ -80,7 +82,7 @@ class Store {
             this.isCheckingAuth = false;
         }
     }
-    
+
 
     async login(login, password) {
         try {
@@ -176,6 +178,45 @@ class Store {
         try {
             const response = await userService.getUserById(userId);
             return response.data.data.user;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getCategories() {
+        try {
+            const response = await categoryService.getCategories();
+            this.categories = response.data.data;
+            return response.data.data;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async createUserForAdmin(login, password, email, role) {
+        try {
+            const response = await userService.createUserForAdmin(login, password, email, role);
+            console.log(role);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getAllUsers() {
+        try {
+            const response = await userService.getAllUsers();
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async deleteUser(userId) {
+        try {
+            const response = await userService.deleteUser(userId);
+            console.log(response);
+            return response;
         } catch (e) {
             console.error("Error", e.message);
         }

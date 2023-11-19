@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import {
     Select,
@@ -8,11 +9,34 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+
 import { Input } from "@/components/ui/input"
 import { TextareaWithMarkdown } from "@/components/ui/textarea"
 import { Slash } from "iconoir-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import store from "@/store/store"
+
+
+
+
 export default function Component() {
+    const [categories, setCategories] = useState([]);
+
+    const getCategories = async () => {
+        try {
+            const fetchedCategories = await store.getCategories(); // Make sure 'store.getCategories()' is a valid function call
+            setCategories(fetchedCategories);
+        } catch (error) {
+            console.error("Failed to fetch categories:", error);
+        }
+    };
+
+    useEffect(() => {
+        getCategories();
+    }, []); // The empty array ensures this effect runs once after the initial render
+
+
     return (
         <div className="bg-background h-full min-h-screen p-6">
             <div className="absolute left-5 top-5 flex flex-row">
@@ -99,9 +123,11 @@ export default function Component() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="tech">Technology</SelectItem>
-                                <SelectItem value="health">Health</SelectItem>
-                                <SelectItem value="sport">Sport</SelectItem>
+                                {categories.map((category) => (
+                                    <SelectItem key={category._id} value={category.title}>
+                                        {category.title}
+                                    </SelectItem>
+                                ))}
                             </SelectGroup>
                         </SelectContent>
                     </Select>

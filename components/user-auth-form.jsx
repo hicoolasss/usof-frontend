@@ -14,18 +14,26 @@ import { toast } from 'sonner'
 import Spinner from "@/components/ui/spinner";
 
 import { EyeOff, Eye } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 
 
-
-export function UserAuthForm({ className, ...props }) {
+export function UserAuthForm({ forAdmin, isLoading, setIsLoading, className, ...props }) {
 
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRevealPwd, setIsRevealPwd] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [role, setRole] = useState('user');
+  const [isAsyncLoading, setIsAsyncLoading] = useState(false);
 
   const router = useRouter();
 
@@ -68,20 +76,26 @@ export function UserAuthForm({ className, ...props }) {
 
   const handleRegistration = async () => {
 
-    setIsLoading(true);
+    setIsAsyncLoading(true);
 
     console.log("onSubmit");
     // Используйте значения состояния вместо FormData
     if (!validate()) {
-      setIsLoading(false);
+      setIsAsyncLoading(false);
       return;
     }
     try {
-      // Вызываем функцию регистрации
-      await Store.registration(login, email, password);
+      if (forAdmin) {
+        const response = await Store.createUserForAdmin(login, password, email, role);
+        console.log("response:", response);
+        toast.success('User created succssesfully!', { duration: 3000 });
+      } else {
+        // Вызываем функцию регистрации
+        await Store.registration(login, email, password);
 
-      router.push('/');
-      toast.success('Registration succssessful!', { duration: 2000 });
+        router.push('/');
+        toast.success('Registration succssessful!', { duration: 2000 });
+      }
 
     } catch (error) {
       console.log("another error:", error);
@@ -89,26 +103,14 @@ export function UserAuthForm({ className, ...props }) {
         toast.error(error.response.data.error, { duration: 2000 });
       }
     } finally {
-      setIsLoading(false);
+      setLogin('');
+      setEmail('');
+      setPassword('');
+      setIsRevealPwd(false);
+      if (forAdmin) setRole('user'); // Reset role if it's an admin form
+      setIsAsyncLoading(false);
     }
   }
-
-
-
-  // const handleRegistrationByGoogle = async () => {
-  //   try {
-
-  //     router.push(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/callback/google`)
-
-  //     // router.push('/home');
-  //     // toast.success('Registration succssessful!', { duration: 2000 });
-
-  //   } catch (error) {
-
-  //     console.error('Error during Google registration:', error);
-
-  //   }
-  // };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -123,33 +125,54 @@ export function UserAuthForm({ className, ...props }) {
               <Input
                 id="login"
                 name="login"
-                placeholder="login"
+                placeholder="verycoollogin"
                 type="text"
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                value={login}
                 onChange={(e) => setLogin(e.target.value)}
               />
             </div>
 
             <div>
-              <Label htmlFor="email">
+              <Label htmlFor="user-create-email">
                 Email
               </Label>
               <Input
-                id="email"
-                name="email"
+                id="user-create-email"
+                name="user-create-email"
                 placeholder="name@example.com"
-                type="email"
+                type="user-create-email"
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
+            {forAdmin && (
+              <>
+                <Label htmlFor="select">
+                  Role
+                </Label>
+                <Select id="select" onValueChange={setRole}>
+                  <SelectTrigger className="w-full -mt-2">
+                    <SelectValue
+                      className="block w-full p-2 rounded text-color"
+                      placeholder="Select role"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="user">User</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </>)}
 
-
-            <div className="relative ">
+            <div className="relative">
               <Label htmlFor="password">
                 Password
               </Label>
@@ -161,12 +184,13 @@ export function UserAuthForm({ className, ...props }) {
                 autoCapitalize="none"
                 autoCorrect="off"
                 disabled={isLoading}
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost" 
-            
-              onClick={() => setIsRevealPwd(prevState => !prevState)}
-              
+              <Button className="absolute bottom-1 right-2 h-8 w-8" size="icon" variant="ghost"
+
+                onClick={() => setIsRevealPwd(prevState => !prevState)}
+
               >
                 {isRevealPwd ? (
                   <EyeOff className="h-5 w-5" />
@@ -179,15 +203,13 @@ export function UserAuthForm({ className, ...props }) {
           </div>
 
           <Button onClick={handleRegistration} className="mt-1" disabled={isLoading || !email || !login || !password}>
-            {isLoading && (
+            {isAsyncLoading && (
               <Spinner className="animate-spin mr-2 w-5 h-5" />
             )}
-            Sign Up
+            {forAdmin ? "Create user" : "Sign up"}
           </Button>
         </div>
       </div>
-
-
     </div>
   );
 }

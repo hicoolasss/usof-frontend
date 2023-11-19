@@ -13,4 +13,16 @@ export default class userService {
         return $api.get(`api/users/${userId}`);
     }
 
+    static async createUserForAdmin(login, password, email, role) {
+        return $api.post(`api/users`, {login, password, email, role});
+    }
+
+    static async getAllUsers() {
+        return $api.get(`api/users`);
+    }
+
+    static async deleteUser(userId) {
+        return $api.delete(`api/users/${userId}`);
+    }
+
 }
