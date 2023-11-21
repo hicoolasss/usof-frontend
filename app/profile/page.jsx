@@ -345,18 +345,20 @@ const Component = observer(() => {
 
                     </CardContent>
                 </Card>
-                <Card className="space-y-4 bg-background">
-                    <CardHeader>
-                        <CardTitle className="text-color">Create New User</CardTitle>
-                    </CardHeader>
+                {user.role === 'admin' && (
+                    <Card className="space-y-4 bg-background">
+                        <CardHeader>
+                            <CardTitle className="text-color">Create New User</CardTitle>
+                        </CardHeader>
 
-                    <CardContent className="px-10">
+                        <CardContent className="px-10">
 
-                        <UserAuthForm forAdmin={true} isLoading={isPageLoading} setIsLoading={toggleLoading} />
+                            <UserAuthForm forAdmin={true} isLoading={isPageLoading} setIsLoading={toggleLoading} />
 
-                    </CardContent>
-                </Card>
-                <Card className="space-y-4 bg-background col-start-3 col-end-4">
+                        </CardContent>
+                    </Card>
+                )}
+                {user.role === 'admin' && (<Card className="space-y-4 bg-background col-start-3 col-end-4">
                     <CardHeader>
                         <CardTitle className="text-color">Create New Category</CardTitle>
                     </CardHeader>
@@ -394,12 +396,12 @@ const Component = observer(() => {
                         </div>
                         <Button className="w-full" disabled={isPageLoading || isAsyncLoading || !title || !description}>Create category</Button>
                     </CardContent>
-                </Card>
+                </Card>)}
             </div>
-            <h1 className="text-3xl font-bold mt-16">User Managment</h1>
+            {user.role === 'admin' && (<h1 className="text-3xl font-bold mt-16">User Managment</h1> && 
             <div className="w-full px-10 rounded-md border-solid border-2 border-ring border-opacity-75 my-12 lg:w-2/3">
                 <DataTable />
-            </div>
+            </div>)}
         </div>
     )
 });

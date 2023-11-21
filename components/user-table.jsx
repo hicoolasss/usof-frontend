@@ -54,6 +54,10 @@ export function DataTable() {
     const [users, setUsers] = React.useState([]);
     const [isAsyncLoading, setIsAsyncLoading] = React.useState(false);
 
+
+    const [pageIndex, setPageIndex] = React.useState(0);
+    const [pageSize, setPageSize] = React.useState(5);
+
     const store = useStore();
 
     const makeApiCall = async (call, successMessage, errorMessage) => {
@@ -204,8 +208,17 @@ export function DataTable() {
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination: { pageIndex, pageSize },
         },
     })
+
+    const handlePreviousPage = () => {
+        setPageIndex(old => Math.max(old - 1, 0));
+    };
+
+    const handleNextPage = () => {
+        setPageIndex(old => (old < table.getPageCount() - 1 ? old + 1 : old));
+    };
 
     return (
         <div className="w-full">
@@ -250,7 +263,7 @@ export function DataTable() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border min-h-[400px]">
+            <div className="rounded-md border min-h-[370px]">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -309,7 +322,7 @@ export function DataTable() {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => table.previousPage()}
+                        onClick={handlePreviousPage}
                         disabled={!table.getCanPreviousPage()}
                     >
                         Previous
@@ -317,7 +330,7 @@ export function DataTable() {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => table.nextPage()}
+                        onClick={handleNextPage}
                         disabled={!table.getCanNextPage()}
                     >
                         Next
