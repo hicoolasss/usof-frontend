@@ -50,11 +50,15 @@ import {
     Users,
     MenuIcon,
     X,
+    Plus
 } from "lucide-react"
 
 import { HomeSimple, ShareIos, Telegram, Instagram } from "iconoir-react";
 
 import { Skeleton } from "@/components/ui/skeleton"
+import { toast } from "sonner";
+
+import { Post } from "@/components/post";
 
 
 
@@ -68,6 +72,10 @@ export default function Component() {
 
     const [user, setUser] = useState(store.user);
 
+    const [posts, setPosts] = useState([]);
+
+    const [searchText, setSearchText] = useState('');
+
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
@@ -80,9 +88,28 @@ export default function Component() {
         }
     }, []);
 
+    const getPosts = async () => {
+
+        try {
+            const response = await store.getPosts();
+            console.log("posts", response.data.data);
+            setPosts(response.data.data);
+        } catch (error) {
+            console.error(error);
+
+        } finally {
+            toast.success("Posts loaded");
+        }
+    }
+
+    useEffect(() => {
+        getPosts();
+    }, []);
+
+
     return (
         <div className="flex flex-col min-h-screen bg-background ">
-            <header className="w-full h-16 px-4 lg:px-6 flex items-center justify-between  border-b border-zinc-200 dark:border-zinc-800">
+            <header className="w-full h-16 px-4 lg:px-6 flex fixed items-center justify-between bg-background  border-b border-zinc-200 dark:border-zinc-800">
                 <div className="relative flex items-center ">
                     <nav className="hidden lg:flex lg:w-full space-x-0  lg:space-x-8">
                         <Button variant="link" className="text-xl font-bold text-color " href="#">
@@ -167,6 +194,8 @@ export default function Component() {
 
                             <Input className="indent-8"
                                 placeholder="Search"
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
                             >
                             </Input>
                         </div>
@@ -203,6 +232,12 @@ export default function Component() {
                                     <Link href="/users" className="flex flexs-row items-center">
                                         <Users className="mr-2 h-4 w-4" />
                                         <span>Users</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link href="/createPost" className="flex flexs-row items-center">
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        <span>New Post</span>
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSub>
@@ -266,50 +301,15 @@ export default function Component() {
                     </Avatar>
                 </div>
             </header>
-            <main className="flex-grow py-8 px-4 md:px-6">
+            <main className="flex-grow py-8 px-4 md:px-6 mt-10">
                 <section className="max-w-3xl mx-auto space-y-8">
-                    <div className="space-y-4 border rounded-lg p-4">
-                        <h2 className="text-xl font-bold">Post Title</h2>
-                        <p className="text-base text-zinc-600 dark:text-zinc-400">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non diam nec augue tincidunt facilisis.
-                            Donec vitae semper purus.
-                        </p>
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                alt="User Avatar"
-                                className="rounded-full"
-                                height="24"
-                                src="/placeholder.svg"
-                                style={{
-                                    aspectRatio: "24/24",
-                                    objectFit: "cover",
-                                }}
-                                width="24"
-                            />
-                            <span className="text-sm text-zinc-500 dark:text-zinc-400">Username</span>
-                        </div>
-                    </div>
-                    <div className="space-y-4 border rounded-lg p-4">
-                        <h2 className="text-xl font-bold">Post Title</h2>
-                        <p className="text-base text-zinc-600 dark:text-zinc-400">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non diam nec augue tincidunt facilisis.
-                            Donec vitae semper purus.
-                        </p>
-                        <div className="flex items-center space-x-2">
-                            <Image
-                                alt="User Avatar"
-                                className="rounded-full"
-                                height="24"
-                                src="/placeholder.svg"
-                                style={{
-                                    aspectRatio: "24/24",
-                                    objectFit: "cover",
-                                }}
-                                width="24"
-                            />
-                            <span className="text-sm text-zinc-500 dark:text-zinc-400">Username</span>
-                        </div>
-                    </div>
+                    {posts.length > 1 &&
+                        posts
+                            .filter((post) =>
+                                post.title.toLowerCase().includes(searchText.toLowerCase())
+                            )
+                            .map((post) => <Post key={post._id} post={post} />)
+                    }
                 </section>
             </main>
             <footer className="w-full h-16 px-4 md:px-6 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800">

@@ -71,6 +71,12 @@
     --gray: #888888;
     --highlight: #ff0080;
 
+    --primary-color: #5c5c5c;
+    --secondary-color: #242424;
+    --accent-color: #8a8a8a;
+    --secondary-background-color: #080808;
+
+
     --gradient: linear-gradient(to bottom, #000000, #141415 , #000000);
   }
 }

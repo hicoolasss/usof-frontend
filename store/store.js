@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import $api from "@/http";
 import userService from "@/services/userService";
 import categoryService from "@/services/categoryService";
+import postService from "@/services/postService";
 
 class Store {
     user = {};
@@ -177,7 +178,16 @@ class Store {
     async getUserById(userId) {
         try {
             const response = await userService.getUserById(userId);
-            return response.data.data.user;
+            return response.data.data;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getCategoryById(categoryId) {
+        try {
+            const response = await categoryService.getCategoryById(categoryId);
+            return response.data.data;
         } catch (e) {
             console.error("Error", e.message);
         }
@@ -191,6 +201,16 @@ class Store {
         } catch (e) {
             console.error("Error", e.message);
         }
+    }
+
+    async createCategory(title, description) {
+        try {
+            const response = await categoryService.createCategory(title, description);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+
     }
 
     async createUserForAdmin(login, password, email, role) {
@@ -222,6 +242,24 @@ class Store {
         }
     }
 
+    async createPost(title, publish_date, status, content, categories) {
+        try {
+            const response = await postService.createPost(title, publish_date, status, content, categories);
+            console.log(response);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getPosts() {
+        try {
+            const response = await postService.getPosts();
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
 
 }
 const store = new Store();

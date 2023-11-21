@@ -156,6 +156,15 @@ const Component = observer(() => {
         if (response) router.push('/verify');
     };
 
+    const handleCreateNewCategory = async () => {
+        setIsAsyncLoading(true);
+        await makeApiCall(
+            () => store.createCategory(title, description ),
+            'Category created successfully!',
+            'Failed to create category.'
+        ).then(() => { setTitle(''); setDescription('') });
+    }
+
 
     return (
         <div className="realtive w-screen h-screen bg-backgorund flex flex-col items-center justify-start overflow-auto" >
@@ -376,6 +385,7 @@ const Component = observer(() => {
                                 autoCapitalize="none"
                                 autoCorrect="off"
                                 disabled={isPageLoading || isAsyncLoading}
+                                value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
                         </div>
@@ -391,10 +401,11 @@ const Component = observer(() => {
                                 autoCapitalize="none"
                                 autoCorrect="off"
                                 disabled={isPageLoading || isAsyncLoading}
+                                value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                        <Button className="w-full" disabled={isPageLoading || isAsyncLoading || !title || !description}>Create category</Button>
+                        <Button className="w-full" disabled={isPageLoading || isAsyncLoading || !title || !description} onClick={handleCreateNewCategory}>Create category</Button>
                     </CardContent>
                 </Card>)}
             </div>

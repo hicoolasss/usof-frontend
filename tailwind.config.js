@@ -1,3 +1,5 @@
+const { color } = require('framer-motion')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -35,6 +37,10 @@ module.exports = {
         warning: "var(--warning)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
+        primary_color: "var(--primary-color)",
+        secondary_color: "var(--secondary-color)",
+        accent_color: "var(--accent-color)",
+        secondary_background_color: "var(--secondary-background-color)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
