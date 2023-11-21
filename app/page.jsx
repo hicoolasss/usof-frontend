@@ -135,14 +135,15 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation"
 
 import { toast } from 'sonner'
-
+import Store from '@/store/store';
+import { useStore } from "@/store/storeContext" 
 export const useLogout = () => {
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
       await Store.logout();
-      router.push('/');
+      router.push('/login');
       toast.success('Logout successful!', { duration: 2000 });
     } catch (error) {
       if (error.message) {
@@ -168,6 +169,33 @@ export default function Component() {
       setTheme(currentTheme);
     }
   }, [theme_temp])
+
+  const store = useStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [isAuth, setIsAuth] = useState(false);
+
+
+  useEffect(() => {
+
+    function checkAuthStatus() {
+      try {
+        store.checkAuth();
+        setIsAuth(store.isAuth);
+        setUser(store.user); // Сохраняем данные пользователя в локальном состоянии
+        setIsLoading(false); // Снимаем индикатор загрузки
+        console.log('user', store.user);
+      } catch (error) {
+        console.error("Ошибка при проверке аутентификации:", error);
+        setIsLoading(false); // Также снимаем индикатор загрузки в случае ошибки
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    // Вызываем асинхронную функцию
+    checkAuthStatus();
+
+  }, [store]);
 
   return (
     <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">

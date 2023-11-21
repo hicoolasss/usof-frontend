@@ -26,4 +26,12 @@ export default class AuthService {
         return $api.post(`/api/auth/verify/${token}`);
     }
 
+    static async resetPassword(email) {
+        return $api.post(`/api/auth/password-reset`, { email });
+    }
+
+    static async changePassword(token, newPassword) {
+        return $api.post(`/api/auth/password-reset/${token}`, { token, newPassword });
+    }
+
 }

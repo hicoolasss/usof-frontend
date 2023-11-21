@@ -261,6 +261,24 @@ class Store {
         }
     }
 
+    async resetPassword(email) {
+        try {
+            const response = await AuthService.resetPassword(email);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async changePassword(token, newPassword) {
+        try {
+            const response = await AuthService.changePassword(token, newPassword);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
 }
 const store = new Store();
 export default store;

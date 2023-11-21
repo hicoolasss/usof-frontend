@@ -148,7 +148,7 @@ const Component = observer(() => {
 
     const handleVerifyEmail = async () => {
         setIsAsyncLoading(true);
-        await makeApiCall(
+        const response = await makeApiCall(
             () => store.verifyEmail(user.email, user.id),
             'Verification link sent to your email!',
             'Failed to send verification link.'
@@ -163,6 +163,16 @@ const Component = observer(() => {
             'Category created successfully!',
             'Failed to create category.'
         ).then(() => { setTitle(''); setDescription('') });
+    }
+
+    const handleChangePassword = async () => {
+        setIsAsyncLoading(true);
+        const response = await makeApiCall(
+            () => store.resetPassword(user.email),
+            'Password reset link sent to your email!',
+            'Failed to change password.'
+        );
+        if (response) router.push('/changePassword');
     }
 
 
@@ -350,6 +360,10 @@ const Component = observer(() => {
                                 :
                                 <Button onClick={handleVerifyEmail} disabled={isPageLoading}>Verify</Button>
                             }
+                        </div>
+                        <div className="space-x-2 flex flex-row items-center ">
+                            <p className="dark:text-gray-200">Password - </p>
+                            <Button variant="destructive" onClick={handleChangePassword }>Change Password</Button>
                         </div>
 
                     </CardContent>
