@@ -13,4 +13,7 @@ export default class postService {
     static async createComment(content, postId, userId) {
         return $api.post(`api/posts/${postId}/comments`, { content, postId, userId });
     }
+    static async likePost(postId) {
+        return $api.post(`api/posts/${postId}/like`, { postId });
+    }
 }

@@ -43,9 +43,10 @@ import {
     MenuIcon,
     X,
     ArrowLeft,
-    Heart,
     Plus
 } from "lucide-react"
+
+import { Heart } from "iconoir-react"
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -68,6 +69,8 @@ export default function Page({ params: { id } }) {
 
     const [comment, setComment] = React.useState('');
     const [commentMessage, setCommentMessage] = React.useState('');
+    const [isPostLiked, setIsPostLiked] = React.useState(false);
+
 
     const logout = useLogout();
     const router = useRouter();
@@ -150,6 +153,25 @@ export default function Page({ params: { id } }) {
             setCommentMessage('');
         }
     }
+
+    const handleLikePost = async () => {
+        try {
+            if (isPostLiked) {
+                // Если пост уже лайкнут, отправьте запрос на дизлайк
+                const response = await store.likePost(id);
+                console.log("unlike:", response);
+            } else {
+                // Если пост не лайкнут, отправьте запрос на лайк
+                const response = await store.likePost(id);
+                console.log("like:", response);
+            }
+
+            // После успешного выполнения запроса, обновите состояние isPostLiked
+            setIsPostLiked(!isPostLiked);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
     if (!post) {
@@ -384,9 +406,29 @@ export default function Page({ params: { id } }) {
                                             day: 'numeric',
                                         })}
                                     </p>
-                                    <Button className="ml-4" size="icon" variant="ghost">
-                                        <Heart className="w-5 h-5" />
+                                    <Button className="ml-4" size="icon" variant="ghost" onClick={handleLikePost}>
+                                        {isPostLiked ? (<>
+                                            {/*?xml version="1.0" encoding="UTF-8"?*/}
+                                            <svg
+                                                width="24px"
+                                                height="24px"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                color="#ffffff"
+                                                strokeWidth="1.2"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    clipRule="evenodd"
+                                                    d="M11.9999 3.94228C13.1757 2.85872 14.7069 2.25 16.3053 2.25C18.0313 2.25 19.679 2.95977 20.8854 4.21074C22.0832 5.45181 22.75 7.1248 22.75 8.86222C22.75 10.5997 22.0831 12.2728 20.8854 13.5137C20.089 14.3393 19.2938 15.1836 18.4945 16.0323C16.871 17.7562 15.2301 19.4985 13.5256 21.14L13.5216 21.1438C12.6426 21.9779 11.2505 21.9476 10.409 21.0754L3.11399 13.5136C0.62867 10.9374 0.62867 6.78707 3.11399 4.21085C5.54605 1.68984 9.46239 1.60032 11.9999 3.94228Z"
+                                                    fill="#ffffff"
+                                                />
+                                            </svg>
+                                        </>
+                                        ) : <Heart className="w-5 h-5" />}
                                     </Button>
+                                    <p className="font-bold text-cyan ml-2">{post.likes.length}</p>
                                 </div>
                             </div>
                         </div>
@@ -397,33 +439,6 @@ export default function Page({ params: { id } }) {
             <section className="max-w-3xl mx-auto mt-10 pt-6">
                 {post && <h2 className="text-2xl font-bold mb-4">{`Comments (${post.comments.length})`}</h2>}
                 <div className="space-y-4">
-                    {/* <div className="border-ring border-2 border-opacity-50 p-4 bg-secondary_background_color rounded-lg space-y-2">
-                        <div className="flex items-center space-x-2">
-                            <Avatar className="h-9 w-9">
-                                <AvatarImage alt="User Avatar" src="/placeholder-avatar.jpg" />
-                                <AvatarFallback>UN</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <h3 className="text-lg font-bold">User Name</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-300">Nov 22, 2023</p>
-                            </div>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt.</p>
-                    </div>
-                    <div className="border-ring border-2 border-opacity-50 p-4 bg-secondary_background_color rounded-lg space-y-2">
-                        <div className="flex items-center space-x-2">
-                            <Avatar className="h-9 w-9">
-                                <AvatarImage alt="User Avatar" src="/placeholder-avatar.jpg" />
-                                <AvatarFallback>UN</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <h3 className="text-lg font-bold">User Name</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-300">Nov 22, 2023</p>
-                            </div>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt.</p>
-                    </div> */}
-
                     {post.comments.map((commentId) => (<Comment key={commentId} commentId={commentId} user={user} />))}
                 </div>
             </section>

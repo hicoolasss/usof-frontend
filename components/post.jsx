@@ -78,11 +78,15 @@ export function Post({ post }) {
                     </Avatar>
                     {author && <p className="text-xl text-color font-bold"> {author.login} </p>}
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 items-center">
                     
-                    <p className="text-accent_color font-bold">
+                    <p className="text-accent_color font-bold text-sm">
                         {new Date(post.publish_date).toLocaleDateString()}
                     </p>
+                    <div className="flex flex-col">
+                    <p className="text-accent_color font-bold text-sm">{`${post.likes.length} Likes`}</p>
+                    <p className="text-accent_color font-bold text-sm">{`${post.comments.length} Comments`} </p>
+                    </div>
                 </div>
             </div>
         </div>

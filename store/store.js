@@ -309,6 +309,17 @@ class Store {
         }
     }
 
+    async likePost(postId) {
+
+        try {
+            const response = await postService.likePost(postId);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+
 }
 const store = new Store();
 export default store;
