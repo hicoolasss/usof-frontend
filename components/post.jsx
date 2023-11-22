@@ -7,7 +7,7 @@ import { useEffect } from "react"
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Separator } from "./ui/separator"
-
+import Link from "next/link"
 
 export function Post({ post }) {
     const [author, setAuthor] = React.useState(null);
@@ -59,9 +59,9 @@ export function Post({ post }) {
 
     return (
         <div className="space-y-4 bg-secondary_background_color rounded-lg p-5 ">
-            <h2 className="text-xl font-bold">{post.title}</h2>
+            <Link className="text-xl font-bold" href={`/posts/${post._id}`}>{post.title}</Link>
             {/* <ReactMarkdown className="prose dark:prose-dark" remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown> */}
-            {category && <p className="text-highlight">{category.title} </p>}
+            {category && <p className="text-highlight">{category.title}</p>}
             <Separator className="my-4 " />
             <div className="flex items-center justify-between">
                 <div className="space-x-2 flex flex-row items-center">

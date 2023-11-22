@@ -5,6 +5,7 @@ import $api from "@/http";
 import userService from "@/services/userService";
 import categoryService from "@/services/categoryService";
 import postService from "@/services/postService";
+import commentService from "@/services/commentService";
 
 class Store {
     user = {};
@@ -252,9 +253,38 @@ class Store {
         }
     }
 
+    async createComment(content, postId, userId) {
+        try {
+            const response = await postService.createComment(content, postId, userId);
+            console.log(response);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getCommentById(commentId) {
+        try {
+            const response = await commentService.getCommentById(commentId);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+
     async getPosts() {
         try {
             const response = await postService.getPosts();
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
+    async getPostById(postId) {
+        try {
+            const response = await postService.getPostById(postId);
             return response;
         } catch (e) {
             console.error("Error", e.message);

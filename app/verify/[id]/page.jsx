@@ -38,7 +38,7 @@ export default function Component({ params: { id } }) {
             <p className="mt-4 text-lg text-center">
                 Thank you for verifying your email. You can now enjoy full access to all our features.
             </p>
-            <Link href="/home">
+            <Link href="/posts">
             <Button className="mt-6 bg-white text-black" variant="default">
                 Go to Home Page
             </Button>

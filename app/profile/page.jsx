@@ -223,7 +223,7 @@ const Component = observer(() => {
                         />
                     </svg>
 
-                    <Link href="/">Smack Overslow</Link>
+                    <Link href="/posts">Smack Overslow</Link>
                     <Slash />
                 </Button>
                 <Button variant="link" className="text-xl font-bold text-color p-0">

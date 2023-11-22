@@ -7,4 +7,10 @@ export default class postService {
     static async getPosts() {
         return $api.get(`api/posts`);
     }
+    static async getPostById(postId) {
+        return $api.get(`api/posts/${postId}`);
+    }
+    static async createComment(content, postId, userId) {
+        return $api.post(`api/posts/${postId}/comments`, { content, postId, userId });
+    }
 }

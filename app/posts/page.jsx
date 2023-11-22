@@ -292,7 +292,7 @@ export default function Component() {
                         </Button>
                     )
                     }
-                    <Avatar >
+                    <Avatar>
                         <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`} style={{ objectFit: "cover" }} quality={100} />
                         <AvatarFallback>
                             <Skeleton />
@@ -303,12 +303,12 @@ export default function Component() {
             </header>
             <main className="flex-grow py-8 px-4 md:px-6 mt-10">
                 <section className="max-w-3xl mx-auto space-y-8">
-                    {posts.length > 1 &&
+                    {posts.length > 1 && user &&
                         posts
                             .filter((post) =>
                                 post.title.toLowerCase().includes(searchText.toLowerCase())
                             )
-                            .map((post) => <Post key={post._id} post={post} />)
+                            .map((post) => <Post key={post._id} post={post}/>)
                     }
                 </section>
             </main>
