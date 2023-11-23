@@ -272,6 +272,15 @@ class Store {
         }
     }
 
+    async likeComment(commentId) {
+        try {
+            const response = await commentService.likeComment(commentId);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
 
     async getPosts() {
         try {

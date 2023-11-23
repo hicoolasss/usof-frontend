@@ -60,6 +60,7 @@ import { useRouter } from "next/navigation"
 
 import Comment from "@/components/comment"
 import { Comme } from "next/font/google"
+import { set } from "mobx"
 export default function Page({ params: { id } }) {
     const [post, setPost] = React.useState(null);
     const [author, setAuthor] = React.useState(null);
@@ -70,6 +71,7 @@ export default function Page({ params: { id } }) {
     const [comment, setComment] = React.useState('');
     const [commentMessage, setCommentMessage] = React.useState('');
     const [isPostLiked, setIsPostLiked] = React.useState(false);
+    const [postLikes, setPostLikes] = React.useState(0);
 
 
     const logout = useLogout();
@@ -78,10 +80,10 @@ export default function Page({ params: { id } }) {
     React.useEffect(() => {
         const getPostById = async () => {
             try {
-                // Assuming store.getUserById returns a promise
                 const response = await store.getPostById(id);
                 console.log("response:", response);
                 setPost(response.data.data); // Assuming the response has a data property
+                setPostLikes(response.data.data.likes.length);
             } catch (error) {
                 console.error(error);
             }
@@ -97,6 +99,11 @@ export default function Page({ params: { id } }) {
                     // Assuming store.getUserById returns a promise
                     const response = await store.getUserById(post.author_id);
                     setAuthor(response); // Assuming the response has a data property
+                    post.likes.forEach(like => {
+                        if (like === user.id) {
+                            setIsPostLiked(true);
+                        }
+                    });
                 }
             } catch (error) {
                 console.error(error);
@@ -160,12 +167,13 @@ export default function Page({ params: { id } }) {
                 // Если пост уже лайкнут, отправьте запрос на дизлайк
                 const response = await store.likePost(id);
                 console.log("unlike:", response);
+                setPostLikes(postLikes - 1);
             } else {
                 // Если пост не лайкнут, отправьте запрос на лайк
                 const response = await store.likePost(id);
                 console.log("like:", response);
+                setPostLikes(postLikes + 1);
             }
-
             // После успешного выполнения запроса, обновите состояние isPostLiked
             setIsPostLiked(!isPostLiked);
         } catch (error) {
@@ -173,6 +181,7 @@ export default function Page({ params: { id } }) {
         }
     };
 
+   
 
     if (!post) {
         // Render nothing or a loading state if `post` is not available
@@ -428,7 +437,7 @@ export default function Page({ params: { id } }) {
                                         </>
                                         ) : <Heart className="w-5 h-5" />}
                                     </Button>
-                                    <p className="font-bold text-cyan ml-2">{post.likes.length}</p>
+                                    <p className="font-bold text-cyan ml-2">{postLikes}</p>
                                 </div>
                             </div>
                         </div>
