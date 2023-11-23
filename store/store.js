@@ -252,6 +252,15 @@ class Store {
             console.error("Error", e.message);
         }
     }
+    async deletePost(postId) {
+        try {
+            const response = await postService.deletePost(postId);
+            console.log(response);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
 
     async createComment(content, postId, userId) {
         try {

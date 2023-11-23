@@ -16,4 +16,7 @@ export default class postService {
     static async likePost(postId) {
         return $api.post(`api/posts/${postId}/like`, { postId });
     }
+    static async deletePost(postId) {
+        return $api.delete(`api/posts/${postId}`);
+    }
 }

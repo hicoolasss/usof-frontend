@@ -279,7 +279,7 @@ export default function Component() {
         <Link href="/login"><Button variant="ghost">Sign in</Button></Link>
       </div>
 
-      <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0 border-2 border-blue-500 border-dotted">
+      <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
 
       {/* <p className="absolute top-10 left-10">cool</p>
       <p className="absolute">awesome</p>
