@@ -1,12 +1,14 @@
-import $api from "@/http";
+import $api from '@/http'
 export default class commentService {
-    static async getCommentById(commentId) {
-        return $api.get(`api/comments/${commentId}`);
-    }
-    static async likeComment(commentId) {
-        return $api.post(`api/comments/${commentId}/like`);
-    }
-    static async deleteCommentById(commentId) {
-        return $api.delete(`api/comments/${commentId}`);
-    }
+  static async getCommentById (commentId) {
+    return $api.get(`api/comments/${commentId}`)
+  }
+
+  static async likeComment (commentId) {
+    return $api.post(`api/comments/${commentId}/like`)
+  }
+
+  static async deleteCommentById (commentId) {
+    return $api.delete(`api/comments/${commentId}`)
+  }
 }
