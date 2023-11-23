@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/theme-swithcer"
 import Image from "next/image"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 import { Input } from "@/components/ui/input"
 import { Search } from "iconoir-react"
@@ -76,6 +76,9 @@ export default function Component() {
 
     const [searchText, setSearchText] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 5; // Здесь вы можете установить количество постов на странице
+
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
@@ -105,6 +108,25 @@ export default function Component() {
     useEffect(() => {
         getPosts();
     }, []);
+
+    // const indexOfLastPost = currentPage * postsPerPage;
+    // const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    // const filteredPosts = posts
+    //     .filter((post) =>
+    //         post.title.toLowerCase().includes(searchText.toLowerCase())
+    //     )
+    //     .slice(indexOfFirstPost, indexOfLastPost);
+    const filteredPosts = useMemo(() => {
+        return posts.filter((post) =>
+            post.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }, [posts, searchText]);
+
+    const paginatedPosts = useMemo(() => {
+        const indexOfLastPost = currentPage * postsPerPage;
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;
+        return filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+    }, [currentPage, filteredPosts]);
 
 
     return (
@@ -303,13 +325,28 @@ export default function Component() {
             </header>
             <main className="flex-grow py-8 px-4 md:px-6 mt-10">
                 <section className="max-w-3xl mx-auto space-y-8">
-                    {posts.length > 1 && user &&
-                        posts
+                    {paginatedPosts.length > 1 && user &&
+                        paginatedPosts
                             .filter((post) =>
                                 post.title.toLowerCase().includes(searchText.toLowerCase())
                             )
-                            .map((post) => <Post key={post._id} post={post}/>)
+                            .map((post) => <Post key={post._id} post={post} />)
                     }
+                    <div className="flex justify-between">
+                        <Button
+                             onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={paginatedPosts.length < postsPerPage}
+
+                        >
+                            Next
+                        </Button>
+                    </div>
                 </section>
             </main>
             <footer className="w-full h-16 px-4 md:px-6 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800">
