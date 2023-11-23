@@ -281,6 +281,15 @@ class Store {
         }
     }
 
+    async deleteCommentById(commentId) {
+        try {
+            const response = await commentService.deleteCommentById(commentId);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
 
     async getPosts() {
         try {

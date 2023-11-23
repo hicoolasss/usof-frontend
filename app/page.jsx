@@ -279,7 +279,12 @@ export default function Component() {
         <Link href="/login"><Button variant="ghost">Sign in</Button></Link>
       </div>
 
-      <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
+      <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0 border-2 border-blue-500 border-dotted">
+
+      {/* <p className="absolute top-10 left-10">cool</p>
+      <p className="absolute">awesome</p>
+      <p className="absolute">brilliant</p>
+      <p className="absolute">wow</p> */}
 
         <div className="space-y-5 w-full flex flex-col items-center">
           <h1 className="text-center text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-accent_color animate-text">

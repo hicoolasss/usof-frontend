@@ -6,4 +6,7 @@ export default class commentService {
     static async likeComment(commentId) {
         return $api.post(`api/comments/${commentId}/like`);
     }
+    static async deleteCommentById(commentId) {
+        return $api.delete(`api/comments/${commentId}`);
+    }
 }

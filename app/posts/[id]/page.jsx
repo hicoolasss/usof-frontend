@@ -72,7 +72,7 @@ export default function Page({ params: { id } }) {
     const [commentMessage, setCommentMessage] = React.useState('');
     const [isPostLiked, setIsPostLiked] = React.useState(false);
     const [postLikes, setPostLikes] = React.useState(0);
-
+    const [comments, setComments] = React.useState([]);
 
     const logout = useLogout();
     const router = useRouter();
@@ -84,6 +84,7 @@ export default function Page({ params: { id } }) {
                 console.log("response:", response);
                 setPost(response.data.data); // Assuming the response has a data property
                 setPostLikes(response.data.data.likes.length);
+                setComments(response.data.data.comments);
             } catch (error) {
                 console.error(error);
             }
@@ -180,6 +181,8 @@ export default function Page({ params: { id } }) {
             console.error(error);
         }
     };
+    
+
 
    
 
@@ -387,7 +390,7 @@ export default function Page({ params: { id } }) {
             </header>
             <section>
                 <div className="text-color px-4 py-6 md:px-6 md:py-12 lg:py-16">
-                    <div className="flex justify-between items-center mt-5">
+                    <div className="flex justify-between items-center mt-5 fixed">
                         <Link href="/posts">
                             <Button className="text-gray-600 dark:text-white" variant="outline">
                                 <ArrowLeft className="w-5 h-5 mr-2" />
@@ -446,9 +449,9 @@ export default function Page({ params: { id } }) {
                 </div>
             </section>
             <section className="max-w-3xl mx-auto mt-10 pt-6">
-                {post && <h2 className="text-2xl font-bold mb-4">{`Comments (${post.comments.length})`}</h2>}
+                {post && <h2 className="text-2xl font-bold mb-4">{`Comments (${comments.length})`}</h2>}
                 <div className="space-y-4">
-                    {post.comments.map((commentId) => (<Comment key={commentId} commentId={commentId} user={user} />))}
+                    {comments.map((commentId) => (<Comment key={commentId} commentId={commentId} user={user} comments={comments} setComments={setComments} />))}
                 </div>
             </section>
             <footer className="max-w-3xl mx-auto mt-6 mb-16">
