@@ -120,7 +120,7 @@
 import Link from "next/link"
 import { Code, Learning, PeaceHand } from "iconoir-react"
 import { Search } from "iconoir-react"
-import { BadgeCheck } from "lucide-react"
+import { BadgeCheck, Undo } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { JetBrains_Mono } from "next/font/google"
 import { cn } from "@/lib/utils"
@@ -132,6 +132,7 @@ import { useRouter } from "next/navigation"
 import { toast } from 'sonner'
 import Store from '@/store/store';
 import { useStore } from "@/store/storeContext"
+import { motion } from "framer-motion"
 export const useLogout = () => {
   const router = useRouter();
 
@@ -191,6 +192,10 @@ export default function Component() {
     checkAuthStatus();
 
   }, [store]);
+
+  const x = 50;
+  const y = 0;
+  const rotate = 372;
 
   return (
     <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
@@ -281,16 +286,19 @@ export default function Component() {
 
       <div className="flex flex-col justify-center items-center space-y-10 mt-16 p-5 md:mt-0 md:p-0 lg:mt-0 lg:p-0">
 
-      {/* <p className="absolute top-10 left-10">cool</p>
-      <p className="absolute">awesome</p>
-      <p className="absolute">brilliant</p>
-      <p className="absolute">wow</p> */}
 
-        <div className="space-y-5 w-full flex flex-col items-center">
-          <h1 className="text-center text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-accent_color animate-text">
+        <div className="space-y-5 relative flex flex-col items-center">
+          <h1 className="text-center z-10 text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-accent_color animate-text">
             Discover Our Interactive Q&A Platform
           </h1>
-          <p className="max-w-[875px] text-sm  text-zinc-500 sm:text-l md:text-xl xl:text-2xl text-center">
+          <motion.h2 className="absolute rotate-12 text-transparent text-6xl font-extrabold -top-[20%] -left-[20%] transform -translate-x-1/2 -translate-y-1/2 bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 hover:animate-pulse z-0"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0, rotate: 336, transition: { delay: 0.5 } }}
+            transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}
+          >
+            Innovate
+          </motion.h2>
+          <p className="max-w-[875px] z-10 text-sm  text-zinc-500 sm:text-l md:text-xl xl:text-2xl text-center">
             Engage in stimulating discussions, ask meaningful questions and provide insightful answers. Let&apos;s learn and grow together.
           </p>
         </div>
@@ -381,6 +389,34 @@ export default function Component() {
               <h4 className="mt-5 ml-1 text-highlight font-JetBrains_Mono">#React</h4>
             </div>
           </div>
+          {/* <motion.div
+            className="w-24 h-24 border-solid border-2 border-blue-500"
+            animate={{ x, y, rotate }}
+            transition={"spring"}
+          /> */}
+          <motion.h2 className="absolute rotate-12 text-transparent text-6xl font-extrabold top-2/3 left-24 bg-clip-text bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 "
+            initial={{ opacity: 0, x: -100 }} // Начальное состояние (невидимое и сдвинутое)
+            animate={{ opacity: 1, x: 0, rotate: 372 }} // Конечное состояние при анимации (появление и вращение)
+            transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}
+          >
+            Inspire
+          </motion.h2>
+          <motion.h2 className="absolute rotate-12 text-transparent text-6xl font-extrabold top-1/3 right-24 bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500"
+            initial={{ opacity: 0, x: -100 }} // Начальное состояние (невидимое и сдвинутое)
+            animate={{ opacity: 1, x: 0, rotate: 384, transition: { delay: 1 } }} // Конечное состояние при анимации (появление и вращение)
+            transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}
+          >
+            Discover
+          </motion.h2>
+          <motion.h2 className="absolute rotate-12 text-transparent text-6xl font-bold top-[77%] left-[62%] text-center bg-clip-text bg-gradient-to-r from-fuchsia-600 to-pink-600 "
+            initial={{ opacity: 0, y: 100 }} // Начальное состояние (невидимое и сдвинутое)
+            animate={{ opacity: 1, y: 0, rotate: 0, transition: { delay: 1.5 } }} // Конечное состояние при анимации (появление и вращение)
+            transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}
+          >
+            Try it!
+          </motion.h2>
+           <Undo className="w-16 h-16 absolute rotate-12 top-[72%] left-[60%]"/>
+
         </div>
       </div>
 

@@ -255,9 +255,6 @@ export default function Component() {
         return sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
     }, [currentPage, sortedPosts, postsPerPage]);
 
-
-
-
     return (
         <div className="relative flex flex-col min-h-screen bg-background ">
             <header className="w-full h-16 px-4 flex fixed z-50 lg:px-6 items-center justify-between bg-background  border-b border-zinc-200 dark:border-zinc-800">
@@ -519,4 +516,3 @@ export default function Component() {
         </div>
     )
 }
-
