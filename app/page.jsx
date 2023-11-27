@@ -415,7 +415,12 @@ export default function Component() {
           >
             Try it!
           </motion.h2>
-           <Undo className="w-16 h-16 absolute rotate-12 top-[72%] left-[60%]"/>
+          <motion.div className="absolute top-[72%] left-[60%]"
+            initial={{ opacity: 0, y: 100 }} // Начальное состояние (невидимое и сдвинутое)
+            animate={{ opacity: 1, y: 0, rotate: 0, transition: { delay: 1.25 } }} // Конечное состояние при анимации (появление и вращение)
+            transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}>
+            <Undo className="w-16 h-16 rotate-12" />
+          </motion.div>
 
         </div>
       </div>
