@@ -134,6 +134,7 @@ import Store from '@/store/store';
 import { useStore } from "@/store/storeContext"
 import { motion } from "framer-motion"
 import Framer from "@/components/framer"
+
 export const useLogout = () => {
   const router = useRouter();
 
@@ -197,6 +198,8 @@ export default function Component() {
   const x = 50;
   const y = 0;
   const rotate = 372;
+
+
 
   return (
     <section className="w-screen h-screen bg-background md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
@@ -289,6 +292,7 @@ export default function Component() {
 
 
         <div className="space-y-5 relative flex flex-col items-center">
+
           <h1 className="text-center z-10 text-3xl font-bold sm:text-4xl md:text-5xl xl:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-color to-accent_color animate-text">
             Discover Our Interactive Q&A Platform
           </h1>
@@ -436,8 +440,6 @@ export default function Component() {
 
         </div>
       </div>
-
-
     </section>
   )
 }

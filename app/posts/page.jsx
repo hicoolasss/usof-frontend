@@ -469,6 +469,7 @@ export default function Component() {
                             <Button
                                 onClick={() => setCurrentPage(currentPage - 1)}
                                 disabled={currentPage === 1}
+                                variant="outline"
                             >
                                 Previous
                             </Button>
