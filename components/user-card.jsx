@@ -2,7 +2,12 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 export default function UserCard() {
-    return (<Card>
+
+
+
+
+    return (
+    <Card>
         <CardHeader className="flex flex-row items-center gap-4">
             <Avatar className="h-9 w-9">
                 <AvatarImage alt="@user1" src="/placeholder-avatar.jpg" />
@@ -19,5 +24,6 @@ export default function UserCard() {
                 <Badge >Rating: 4.7</Badge>
             </div>
         </CardContent>
-    </Card>)
+    </Card>
+    )
 }

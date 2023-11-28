@@ -10,8 +10,11 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header";
+import UserCard from "@/components/user-card";
 
 export default function Component() {
+    const [users, setUsers] = React.useState([])
+    const [isLoading, setIsLoading] = React.useState(false)
 
     return (
         <>
