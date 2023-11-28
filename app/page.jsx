@@ -133,6 +133,7 @@ import { toast } from 'sonner'
 import Store from '@/store/store';
 import { useStore } from "@/store/storeContext"
 import { motion } from "framer-motion"
+import Framer from "@/components/framer"
 export const useLogout = () => {
   const router = useRouter();
 
@@ -304,22 +305,27 @@ export default function Component() {
         </div>
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 w-3/4">
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-            <Learning className="text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out " />
+            <Framer>
+              <Learning className="text-accent_color h-8 w-full mb-2 opacity-75 " />
+            </Framer>
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">User-friendly Interface</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
               Navigating our platform is a breeze with our intuitive design.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-            <Search className="text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
+            <Framer>
+              <Search className="text-accent_color h-8 w-full mb-2 opacity-75" />
+            </Framer>
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Powerful Search</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
               Implement a robust search engine that enables users to easily find relevant questions and answers.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-
-            <PeaceHand className="text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
+            <Framer>
+              <PeaceHand className="text-accent_color h-8 w-full mb-2 opacity-75" />
+            </Framer>
 
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Voting and Rating System</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
@@ -327,50 +333,56 @@ export default function Component() {
             </p>
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-            <BadgeCheck className="text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out" />
+            <Framer>
+              <BadgeCheck className="text-accent_color h-8 w-full mb-2 opacity-75" />
+            </Framer>
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Tagging and Categorization</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
               Enable users to categorize questions with relevant tags or topics.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-            <svg
-              className=" text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect height="11" rx="2" ry="2" width="18" x="3" y="11" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
+            <Framer>
+              <svg
+                className=" text-accent_color h-8 w-full mb-2 opacity-75"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect height="11" rx="2" ry="2" width="18" x="3" y="11" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </Framer>
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Reliable Security</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
               With Reliable Security, your data is always safe and protected.
             </p>
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
-            <svg
-              className=" text-accent_color h-6 w-full mb-2 opacity-75 hover:-translate-y-3 hover:scale-150 transition ease-in-out"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="m8 6 4-4 4 4" />
-              <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
-              <path d="m20 22-5-5" />
-            </svg>
+            <Framer>
+              <svg
+                className=" text-accent_color h-8 w-full mb-2 opacity-75"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="m8 6 4-4 4 4" />
+                <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
+                <path d="m20 22-5-5" />
+              </svg>
+            </Framer>
             <h2 className="text-l md:text-xl lg:text-xl font-bold text-color">Knowledge Sharing</h2>
             <p className="text-accent-foreground dark:text-zinc-100">
               Share your insights and learn from others.
