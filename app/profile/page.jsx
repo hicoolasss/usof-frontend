@@ -64,6 +64,7 @@ const Component = observer(() => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [users, setUsers] = useState([]);
+    
     const makeApiCall = async (call, successMessage, errorMessage) => {
         try {
             const response = await call();
@@ -99,6 +100,7 @@ const Component = observer(() => {
             }
         }
     };
+    
     const updateUserState = (userData) => {
         setUser(userData);
         const { full_name = '', email = '' } = userData;

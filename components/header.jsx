@@ -120,6 +120,14 @@ export default function Header () {
                             Users
                         </Button>
                     </Link>
+                    <Link href="/posts">
+                        <Button
+                            variant="ghost"
+                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                        >
+                            Posts
+                        </Button>
+                    </Link>
 
                     {user ? (
                         <Link href="/createPost">

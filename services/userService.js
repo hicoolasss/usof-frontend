@@ -25,4 +25,8 @@ export default class userService {
         return $api.delete(`api/users/${userId}`);
     }
 
+    static async getAllUsers() {
+        return $api.get(`api/users`);
+    }
+
 }

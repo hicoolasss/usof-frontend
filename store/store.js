@@ -346,6 +346,16 @@ class Store {
         }
     }
 
+    async getAllUsers() {
+        try {
+            const response = await userService.getAllUsers();
+            console.log(response);
+            return response;
+        } catch (e) {
+            console.error("Error", e.message);
+        }
+    }
+
    
 
 

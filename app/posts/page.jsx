@@ -63,13 +63,7 @@ import { toast } from "sonner";
 
 import { Post } from "@/components/post";
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
-
+import PostsCardSkeleton from "@/components/posts-skeleton";
 
 export default function Component() {
 
@@ -117,7 +111,6 @@ export default function Component() {
         if (storedUserData) {
             // Инициализируем состояние данными пользователя из localStorage
             setUser(JSON.parse(storedUserData));
-            setIsLoading(false);
         }
     }, []);
 
@@ -128,11 +121,12 @@ export default function Component() {
             const response = await store.getPosts();
             console.log("posts", response.data.data);
             setPosts(response.data.data);
+            toast.success("Posts loaded");
         } catch (error) {
             console.error(error);
+            setIsLoading(false);
         } finally {
-            setIsAsyncLoading(false);
-            toast.success("Posts loaded");
+            setIsLoading(false);
         }
     }
 
@@ -451,19 +445,11 @@ export default function Component() {
             </header>
             <main className="flex-grow py-8 px-4 md:px-6 mt-10 ">
                 <section className="max-w-3xl mx-auto space-y-8">
-                    {(paginatedPosts.length >= 1) && user &&
+                    {(paginatedPosts.length > 0) && user &&
                         paginatedPosts
                             .map((post) => <Post key={post._id} post={post} user={user} posts={paginatedPosts} setPosts={setPosts} />)
                     }
-                    {posts && posts.length === 0 ? (
-                        <p className="text-3xl font-bold text-warning self-center">Loading...</p>
-                    ) : (
-                        <>
-                            {paginatedPosts.length == 0 && (
-                                <p className="text-3xl font-bold text-warning self-center">No matching posts found</p>
-                            )}
-                        </>
-                    )}
+                    {isLoading && <PostsCardSkeleton />}
                     <div className="flex justify-between">
                         {paginatedPosts.length > 1 && (
                             <Button

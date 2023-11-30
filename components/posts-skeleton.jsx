@@ -1,19 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton"
-
-export default function Component() {
-    return (
-        <main className="flex-grow py-8 px-4 md:px-6 mt-10 ">
-            <section className="max-w-3xl mx-auto space-y-8">
-                <Skeletons />
-            </section>
-        </main>
-    )
-}
-
-
-function Skeletons() {
-
+import { Skeleton } from "./ui/skeleton"
+import {  CardHeader, CardContent, Card } from "@/components/ui/card"
+export default function PostsCardSkeleton() {
     return [...Array(5)].map((_, index) => (
         <div key={index} className="space-y-4 bg-secondary_background_color rounded-lg p-5 relative ">
             <Skeleton className="w-1/2 h-8 " />

@@ -105,11 +105,11 @@ export function Post({ post, user, posts, setPosts }) {
                 </div>
 
             </div>
-                {author && user && (author._id === user.id || user.role === "admin") && (
-                    <Button variant="destructive" size="icon" className="absolute top-5 right-5" onClick={handleDeletePost} >
-                        <Trash className="w-5 h-5" />
-                    </Button>
-                )}
+            {author && user && (author._id === user.id || user.role === "admin") && (
+                <Button variant="destructive" size="icon" className="absolute top-5 right-5" onClick={handleDeletePost} >
+                    <Trash className="w-5 h-5" />
+                </Button>
+            )}
         </div>
     )
 }
