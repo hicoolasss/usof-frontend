@@ -13,10 +13,12 @@ import Header from "@/components/header";
 import UserCard from "@/components/user-card";
 import UserCardsSkeleton from "@/components/user-cards-skeleton";
 import store from "@/store/store";
+import Footer from "@/components/footer";
+
 
 export default function Component() {
     const [users, setUsers] = React.useState([])
-    const [isLoading, setIsLoading] = React.useState(true); 
+    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         const fetchUsers = async () => {
@@ -41,13 +43,14 @@ export default function Component() {
                 <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 bg-background mt-10">
                     <h1 className="font-semibold text-3xl mx-auto max-w-6xl mt-5">Users</h1>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto auto-rows-fr">
-                    {isLoading
-                            ? <UserCardsSkeleton/> // Рендерим скелетоны во время загрузки
+                        {isLoading
+                            ? <UserCardsSkeleton /> // Рендерим скелетоны во время загрузки
                             : users.map((user) => (
-                                  <UserCard key={user._id} user={user} />
-                              ))}
+                                <UserCard key={user._id} user={user} />
+                            ))}
                     </div>
                 </main>
+                <Footer/>
             </div>
         </>
     )

@@ -60,24 +60,29 @@ export function DataTable() {
 
     const store = useStore();
 
-    const makeApiCall = async (call, successMessage, errorMessage) => {
+    const makeApiCall = async (call, successMessage, errorMessage, isRefresh) => {
         try {
             const response = await call();
-            toast.success(successMessage, { duration: 2000 });
+            if (isRefresh) {
+                toast.success(successMessage, { duration: 2000 });
+            }
             return response;
         } catch (error) {
-            toast.error(errorMessage || error.message, { duration: 2000 });
+            if (isRefresh) {
+                toast.error(errorMessage, { duration: 2000 });
+            }
             console.error("Error", error.message);
         } finally {
             setIsAsyncLoading(false);
         }
     };
 
-    const getAllUsers = useCallback(async () => {
+    const getAllUsers = useCallback(async (isRefresh) => {
         const response = await makeApiCall(
             () => store.getAllUsers(),
             'Users fetched successfully!',
-            'Failed to fetch users.'
+            'Failed to fetch users.',
+            isRefresh
         );
         if (response) {
             setUsers(response.data.data);
@@ -233,7 +238,7 @@ export function DataTable() {
                 />
                 <Button variant="outline" size="icon" className="p-2 ml-auto"
 
-                    onClick={() => getAllUsers()}
+                    onClick={() => getAllUsers(true)}
 
                 ><RefreshCcw /></Button>
                 <DropdownMenu>

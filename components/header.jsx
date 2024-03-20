@@ -45,16 +45,25 @@ import { HomeSimple, ShareIos, Telegram, Instagram } from "iconoir-react";
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { UserContext } from "@/store/userContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import { usePathname } from 'next/navigation'
 
-export default function Header () {
+export default function Header() {
     const { user, logout } = useContext(UserContext);
     const [searchText, setSearchText] = React.useState('');
+    const pathname = usePathname()
+
+    const isActive = (path) => {
+        return pathname === path
+    }
+
+
+
 
     return (
         <header className="w-full h-16 px-4 flex fixed z-50 lg:px-6 items-center justify-between bg-background  border-b border-zinc-200 dark:border-zinc-800">
             <div className="relative flex items-center ">
-                <nav className="hidden lg:flex lg:w-full space-x-0  lg:space-x-8">
+                <nav className="hidden lg:flex lg:w-full space-x-0 xl:space-x-8 lg:space-x-2">
                     <Button variant="link" className="text-xl font-bold text-color " href="#">
                         <svg className="mr-1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +114,7 @@ export default function Header () {
                         <Link href="/profile">
                             <Button
                                 variant="ghost"
-                                className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                className={`text-base font-medium ${isActive('/profile') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                             >
                                 Profile
                             </Button>
@@ -115,7 +124,7 @@ export default function Header () {
                     <Link href="/users">
                         <Button
                             variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                            className={`text-base font-medium ${isActive('/users') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                         >
                             Users
                         </Button>
@@ -123,24 +132,35 @@ export default function Header () {
                     <Link href="/posts">
                         <Button
                             variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                            className={`text-base font-medium ${isActive('/posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                         >
                             Posts
                         </Button>
                     </Link>
 
                     {user ? (
+                        <Link href="/my-posts">
+                            <Button
+                                variant="ghost"
+                                className={`text-base font-medium ${isActive('/my-posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
+                            >
+                                My Posts
+                            </Button>
+                        </Link>
+                    ) : null}
+
+                    {user ? (
                         <Link href="/createPost">
                             <Button
                                 variant="ghost"
-                                className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                className={`text-base font-medium ${isActive('/createPost') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                             >
                                 New Post
                             </Button>
                         </Link>
                     ) : null}
 
-                    <div className="relative justify-self-start hidden lg:flex md:flex items-center w-64 ml-8 md:ml-0 lg:ml-8 xl:ml-8">
+                    <div className="relative justify-self-start hidden lg:flex md:flex items-center xl:w-64  ml-8 md:ml-0 lg:ml-8 xl:ml-8">
                         <Button variant="ghost" size="icon" className="absolute"><Search className="w-5 h-5" /></Button>
 
                         <Input className="indent-8"
@@ -237,7 +257,7 @@ export default function Header () {
                         Sign Out
                     </Button>) : (
                     <Button variant="ghost"
-                        className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                        className={`text-base font-medium ${isActive('/posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                     >
                         <Link href="/login">Log in</Link>
                     </Button>
@@ -249,7 +269,7 @@ export default function Header () {
                         <Skeleton />
                     </AvatarFallback>
 
-                </Avatar>) : null }
+                </Avatar>) : null}
             </div>
         </header>
     )

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input"
-import { TextareaWithMarkdown } from "@/components/ui/textarea"
+import { TextareaWithMarkdown } from "@/components/ui/TextareaWithMardown"
 import { Slash } from "iconoir-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -145,7 +145,7 @@ export default function Component() {
                         />
                     </svg>
 
-                    <Link href="/" className="ml-1">Smack Overslow</Link>
+                    <Link href="/posts" className="ml-1">Smack Overslow</Link>
                     <Slash />
                 </Button>
                 <Button variant="link" className="text-xl font-bold text-color p-0">

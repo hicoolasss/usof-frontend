@@ -24,6 +24,8 @@ import {
     ContextMenuSubTrigger,
     ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function Comment({ commentId, user, comments, setComments }) {
     const [authorId, setAuthorId] = React.useState(null); // [author_id, setAuthorId
@@ -125,7 +127,8 @@ export default function Comment({ commentId, user, comments, setComments }) {
                             })}</p>}
                     </div>
                 </div>
-                {comment && <p className="mt-5">{comment.content}</p>}
+                {/* <ReactMarkdown className="prose dark:prose-dark" remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown> */}
+                {comment &&  <ReactMarkdown className="prose dark:prose-dark mt-5" remarkPlugins={[remarkGfm]}>{comment.content}</ReactMarkdown>}
                 <div className="absolute top-5 right-5 flex flex-col items-center">
                     <div className="flex items-start space-x-1 ">
                         <div className="flex flex-col items-center">

@@ -64,6 +64,9 @@ import { toast } from "sonner";
 import { Post } from "@/components/post";
 
 import PostsCardSkeleton from "@/components/posts-skeleton";
+import { usePathname } from "next/navigation";
+import Footer from "@/components/footer";
+
 
 export default function Component() {
 
@@ -121,7 +124,6 @@ export default function Component() {
             const response = await store.getPosts();
             console.log("posts", response.data.data);
             setPosts(response.data.data);
-            toast.success("Posts loaded");
         } catch (error) {
             console.error(error);
             setIsLoading(false);
@@ -249,11 +251,17 @@ export default function Component() {
         return sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
     }, [currentPage, sortedPosts, postsPerPage]);
 
+    const pathname = usePathname()
+
+    const isActive = (path) => {
+        return pathname === path
+    }
+
     return (
         <div className="relative flex flex-col min-h-screen bg-background ">
             <header className="w-full h-16 px-4 flex fixed z-50 lg:px-6 items-center justify-between bg-background  border-b border-zinc-200 dark:border-zinc-800">
                 <div className="relative flex items-center ">
-                    <nav className="hidden lg:flex lg:w-full space-x-0  lg:space-x-8">
+                    <nav className="hidden lg:flex lg:w-full space-x-0 xl:space-x-8 lg:space-x-2">
                         <Button variant="link" className="text-xl font-bold text-color " href="#">
                             <svg className="mr-1"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +312,7 @@ export default function Component() {
                             <Link href="/profile">
                                 <Button
                                     variant="ghost"
-                                    className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                    className={`text-base font-medium ${isActive('/profile') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                                 >
                                     Profile
                                 </Button>
@@ -314,17 +322,36 @@ export default function Component() {
                         <Link href="/users">
                             <Button
                                 variant="ghost"
-                                className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                className={`text-base font-medium ${isActive('/users') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                             >
                                 Users
                             </Button>
                         </Link>
+                        <Link href="/posts">
+                            <Button
+                                variant="ghost"
+                                className={`text-base font-medium ${isActive('/posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
+                            >
+                                Posts
+                            </Button>
+                        </Link>
+
+                        {user ? (
+                            <Link href="/my-posts">
+                                <Button
+                                    variant="ghost"
+                                    className={`text-base font-medium ${isActive('/my-posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
+                                >
+                                    My Posts
+                                </Button>
+                            </Link>
+                        ) : null}
 
                         {user ? (
                             <Link href="/createPost">
                                 <Button
                                     variant="ghost"
-                                    className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                                    className={`text-base font-medium ${isActive('/createPost') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                                 >
                                     New Post
                                 </Button>
@@ -428,22 +455,22 @@ export default function Component() {
                             Sign Out
                         </Button>) : (
                         <Button variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                            className={`text-base font-medium ${isActive('/posts') ? 'bg-secondary_color' : 'text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'}`}
                         >
                             <Link href="/login">Log in</Link>
                         </Button>
                     )
                     }
-                    <Avatar>
+                    {user ? (<Avatar>
                         <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`} style={{ objectFit: "cover" }} quality={100} />
                         <AvatarFallback>
                             <Skeleton />
                         </AvatarFallback>
 
-                    </Avatar>
+                    </Avatar>) : null}
                 </div>
             </header>
-            <main className="flex-grow py-8 px-4 md:px-6 mt-10 ">
+            <main className="flex-grow py-8 px-4 md:px-6 lg:mt-16 mt-24  ">
                 <section className="max-w-3xl mx-auto space-y-8">
                     {(paginatedPosts.length > 0) && user &&
                         paginatedPosts
@@ -473,7 +500,7 @@ export default function Component() {
                 </section>
 
                 <div className="absolute top-20 right-10 z-10 flex items-center space-x-3">
-                    <p className="text-xl font-semibold">
+                    <p className="hidden lg:flex lg:text-xl lg:font-semibold">
                         {!showFilters ? ("Show filters") : ("")}
                     </p>
                     <Button variant="outline" size="icon" onClick={toggleFilters}>
@@ -483,23 +510,7 @@ export default function Component() {
 
                 {showFilters && <Filters filters={filters} setFilters={setFilters} />}
             </main>
-            <footer className="w-full h-16 px-4 md:px-6 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800">
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">© 2023 Company Name. All rights reserved.</p>
-                <nav className="hidden lg:flex space-x-4">
-                    <Link
-                        className="text-sm text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                        href="#"
-                    >
-                        Terms
-                    </Link>
-                    <Link
-                        className="text-sm text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                        href="#"
-                    >
-                        Privacy
-                    </Link>
-                </nav>
-            </footer>
+            <Footer/>
         </div>
     )
 }

@@ -90,7 +90,7 @@ export function Post({ post, user, posts, setPosts }) {
                             <Skeleton />
                         </AvatarFallback>
                     </Avatar>
-                    {author && <p className="text-xl text-color font-bold"> {author.login} </p>}
+                    {author && <p className="text-xl text-color font-bold max-w-[120px] lg:max-w-none break-words"> {author.login} </p>}
                 </div>
 
                 <div className="flex space-x-2 items-center">
@@ -106,7 +106,7 @@ export function Post({ post, user, posts, setPosts }) {
 
             </div>
             {author && user && (author._id === user.id || user.role === "admin") && (
-                <Button variant="destructive" size="icon" className="absolute top-5 right-5" onClick={handleDeletePost} >
+                <Button variant="destructive" size="icon" className="absolute lg:top-5 lg:right-5 top-10 right-5" onClick={handleDeletePost} >
                     <Trash className="w-5 h-5" />
                 </Button>
             )}

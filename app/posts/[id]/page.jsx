@@ -59,8 +59,8 @@ import { useLogout } from "@/app/page"
 import { useRouter } from "next/navigation"
 
 import Comment from "@/components/comment"
-import { Comme } from "next/font/google"
-import { set } from "mobx"
+import { Textarea } from "@/components/ui/textarea"
+import Header from "@/components/header"
 export default function Page({ params: { id } }) {
     const [post, setPost] = React.useState(null);
     const [author, setAuthor] = React.useState(null);
@@ -73,6 +73,7 @@ export default function Page({ params: { id } }) {
     const [isPostLiked, setIsPostLiked] = React.useState(false);
     const [postLikes, setPostLikes] = React.useState(0);
     const [comments, setComments] = React.useState([]);
+    const [description, setDescription] = React.useState('');
 
     const logout = useLogout();
     const router = useRouter();
@@ -181,10 +182,10 @@ export default function Page({ params: { id } }) {
             console.error(error);
         }
     };
-    
 
 
-   
+
+
 
     if (!post) {
         // Render nothing or a loading state if `post` is not available
@@ -196,201 +197,10 @@ export default function Page({ params: { id } }) {
 
     return (
         <>
-            <header className="w-full h-16 px-4 lg:px-6 flex fixed items-center justify-between bg-background  border-b border-zinc-200 dark:border-zinc-800">
-                <div className="relative flex items-center ">
-                    <nav className="hidden lg:flex lg:w-full space-x-0  lg:space-x-8">
-                        <Button variant="link" className="text-xl font-bold text-color " href="#">
-                            <svg className="mr-1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24px"
-                                height="24px"
-                                fill="none"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                color="var(--color)"
-                            >
-                                <rect
-                                    width={7}
-                                    height={5}
-                                    x={3}
-                                    y={2}
-                                    stroke="var(--color)"
-                                    strokeWidth="2"
-                                    rx="0.6"
-                                />
-                                <rect
-                                    width={7}
-                                    height={5}
-                                    x="8.5"
-                                    y={17}
-                                    stroke="var(--color)"
-                                    strokeWidth="2"
-                                    rx="0.6"
-                                />
-                                <rect
-                                    width={7}
-                                    height={5}
-                                    x={14}
-                                    y={2}
-                                    stroke="var(--color)"
-                                    strokeWidth="2"
-                                    rx="0.6"
-                                />
-                                <path
-                                    stroke="var(--color)"
-                                    strokeWidth="2"
-                                    d="M6.5 7v3.5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7M12 12.5V17"
-                                />
-                            </svg>
-                            <Link href="/">Smack Overslow</Link>
-
-                        </Button>
-                        {user ? (
-                            <Link href="/profile">
-                                <Button
-                                    variant="ghost"
-                                    className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                                >
-                                    Profile
-                                </Button>
-                            </Link>
-                        ) : null}
-
-                        <Link href="/users">
-                            <Button
-                                variant="ghost"
-                                className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                            >
-                                Users
-                            </Button>
-                        </Link>
-
-                        {user ? (
-                            <Link href="/createPost">
-                                <Button
-                                    variant="ghost"
-                                    className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                                >
-                                    New Post
-                                </Button>
-                            </Link>
-                        ) : null}
-
-                        <div className="relative justify-self-start hidden lg:flex md:flex items-center w-64 ml-8 md:ml-0 lg:ml-8 xl:ml-8">
-                            <Button variant="ghost" size="icon" className="absolute"><Search className="w-5 h-5" /></Button>
-
-                            <Input className="indent-8"
-                                placeholder="Search"
-                                value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
-                            >
-                            </Input>
-                        </div>
-                    </nav>
-                    <nav className="lg:hidden flex">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild >
-                                <Button variant="ghost" size="icon" >
-                                    <MenuIcon />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56" >
-                                <DropdownMenuLabel>Posts</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem>
-                                        <Link href="/profile" className="flex flexs-row items-center">
-                                            <User className="mr-2 h-4 w-4" />
-                                            Profile
-                                        </Link>
-
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <Link href="/" className="flex flexs-row items-center">
-                                            <HomeSimple className="mr-2 h-4 w-4" />
-                                            Home
-                                        </Link>
-
-                                    </DropdownMenuItem>
-
-                                </DropdownMenuGroup>
-
-                                <DropdownMenuItem>
-                                    <Link href="/users" className="flex flexs-row items-center">
-                                        <Users className="mr-2 h-4 w-4" />
-                                        <span>Users</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link href="/createPost" className="flex flexs-row items-center">
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        <span>New Post</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSub>
-                                    <DropdownMenuSubTrigger>
-                                        <ShareIos className="mr-2 h-4 w-4" />
-                                        <span>Socials</span>
-                                    </DropdownMenuSubTrigger>
-                                    <DropdownMenuPortal>
-                                        <DropdownMenuSubContent>
-                                            <DropdownMenuItem>
-                                                <Link href="https://web.telegram.org/#/im?p=@hicoolasss" target="_blank" className="flex flexs-row items-center">
-                                                    <Telegram className="mr-2 h-4 w-4" />
-                                                    <span>Telegram</span>
-                                                </Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <Link href="https://www.instagram.com/hicoolasss/" target="_blank" className="flex flexs-row items-center">
-                                                    <Instagram className="mr-2 h-4 w-4" />
-                                                    <span>Instagram</span>
-                                                </Link>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <Link href="https://github.com/hicoolasss" target="_blank" className="flex flexs-row items-center">
-                                                    <Github className="mr-2 h-4 w-4" />
-                                                    <span>Github</span>
-                                                </Link>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuSubContent>
-                                    </DropdownMenuPortal>
-                                </DropdownMenuSub>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={logout}>
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    <span>Log out</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </nav>
-                </div>
-
-
-                <div className="flex items-center space-x-4 lg:space-x-4">
-                    <div ><ModeToggle /></div>
-                    {user ? (
-                        <Button className="hidden lg:inline-flex " variant="outline" onClick={logout}>
-                            Sign Out
-                        </Button>) : (
-                        <Button variant="ghost"
-                            className="text-base font-medium text-zinc-600 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-                        >
-                            <Link href="/login">Log in</Link>
-                        </Button>
-                    )
-                    }
-                    <Avatar>
-                        <AvatarImage src={userAvatarSrc} style={{ objectFit: "cover" }} quality={100} />
-                        <AvatarFallback>
-                            <Skeleton />
-                        </AvatarFallback>
-
-                    </Avatar>
-                </div>
-            </header>
+            <Header/>
             <section>
                 <div className="text-color px-4 py-6 md:px-6 md:py-12 lg:py-16">
-                    <div className="flex justify-between items-center mt-5 fixed">
+                    <div className="hidden justify-between items-center mt-5 lg:flex">
                         <Link href="/posts">
                             <Button className="text-gray-600 dark:text-white" variant="outline">
                                 <ArrowLeft className="w-5 h-5 mr-2" />
@@ -400,7 +210,7 @@ export default function Page({ params: { id } }) {
                     </div>
                     <article className="max-w-3xl mx-auto">
                         <div className="space-y-5 mb-6">
-                            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">{post.title}</h1>
+                            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl lg:mt-10 mt-24">{post.title}</h1>
                             <div>
                                 <div className="flex items-center">
                                     <div className="flex items-center">
@@ -456,14 +266,22 @@ export default function Page({ params: { id } }) {
             </section>
             <footer className="max-w-3xl mx-auto mt-6 mb-16">
                 <div className="flex flex-col">
-                    <div className="flex flex-row space-x-2">
-                        <Input
+                    <div className="flex flex-row space-x-2 ">
+                        {/* <TextareaWithMarkdown
                             placeholder="Add a comment..."
                             type="text"
                             value={commentMessage}
                             onChange={(e) => setCommentMessage(e.target.value)}
+                        /> */}
+                        <Textarea
+                            className="block w-full p-2 border border-gray-300 rounded mb-4 h-24 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            id="description"
+                            placeholder="Add a comment..."
+                            value={commentMessage}
+                            onChange={(e) => setCommentMessage(e.target.value)}
                         />
-                        <Button onClick={handleCreateComment}>Add</Button>
+                        
+                        <Button className="mt-[27px]" onClick={handleCreateComment}>Add</Button>
                     </div>
                 </div>
             </footer>

@@ -335,6 +335,7 @@ export default function Component() {
             <p className="text-accent-foreground dark:text-zinc-100">
               Allow users to upvote or downvote both questions and answers.
             </p>
+            
           </div>
           <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
             <Framer>
@@ -393,7 +394,7 @@ export default function Component() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col ">
+        <div className="flex flex-col overflow">
           <Link href="/posts" className="w-full">
             <Button className="w-full">
               Let&apos;s Start!
@@ -424,7 +425,7 @@ export default function Component() {
           >
             Discover
           </motion.h2>
-          <motion.h2 className="absolute rotate-12 text-transparent text-6xl font-bold top-[77%] left-[62%] text-center bg-clip-text bg-gradient-to-r from-fuchsia-600 to-pink-600 "
+          <motion.h2 className="absolute h-16 rotate-12 text-transparent text-6xl font-bold top-[77%] left-[62%] text-center bg-clip-text bg-gradient-to-r from-fuchsia-600 to-pink-600 "
             initial={{ opacity: 0, y: 100 }} // Начальное состояние (невидимое и сдвинутое)
             animate={{ opacity: 1, y: 0, rotate: 0, transition: { delay: 1.5 } }} // Конечное состояние при анимации (появление и вращение)
             transition={{ duration: 1, loop: Infinity, type: "spring", stiffness: 50 }}

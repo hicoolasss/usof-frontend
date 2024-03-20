@@ -396,7 +396,7 @@ const Component = observer(() => {
                             <Input
                                 id="title"
                                 name="title"
-                                placeholder="How to create placeholders?"
+                                placeholder="Next.js"
                                 type="text"
                                 autoCapitalize="none"
                                 autoCorrect="off"
@@ -412,7 +412,7 @@ const Component = observer(() => {
                             <Input
                                 id="description"
                                 name="description"
-                                placeholder="I want to know how to ..."
+                                placeholder="Next.js, modern web development framework for React."
                                 type="text"
                                 autoCapitalize="none"
                                 autoCorrect="off"

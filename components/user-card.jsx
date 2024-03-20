@@ -5,7 +5,7 @@ export default function UserCard({ user }) {
     return (
     <Card>
         <CardHeader className="flex flex-row items-center gap-4">
-            <Avatar className="h-9 w-9">
+            <Avatar className="h-12 w-12">
                 <AvatarImage alt="@user" src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${user.profile_picture_path}`} />
                 <AvatarFallback>U</AvatarFallback>
             </Avatar>
